@@ -5,8 +5,16 @@ import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } fr
 import { Trophy, Zap, ShieldCheck, Leaf, Globe2, Sparkles } from "lucide-react"; // Asumsi lu pake lucide-react
 
 // --- 1. KOMPONEN GYRO IMAGE (REFINED WITH 50MS BLUR HACK) ---
-const LusionImage = ({ src, alt }: { src: string; alt: string }) => {
+const LusionImage = ({
+  src,
+  alt,
+  cursor = "default",
+  flashFirst = true,
+  enableHoverZoom = true,
+}: { src: string; alt: string; cursor?: string; flashFirst?: boolean; enableHoverZoom?: boolean }) => {
   const [heroImgBlurred, setHeroImgBlurred] = useState(false);
+  const [allowInteraction, setAllowInteraction] = useState(!flashFirst);
+  const [flashVisible, setFlashVisible] = useState(flashFirst);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -16,7 +24,23 @@ const LusionImage = ({ src, alt }: { src: string; alt: string }) => {
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
 
+  useEffect(() => {
+    if (!flashFirst) return;
+    // Show flash briefly then enable interaction
+    setHeroImgBlurred(true);
+    const t1 = setTimeout(() => setFlashVisible(false), 380);
+    const t2 = setTimeout(() => {
+      setHeroImgBlurred(false);
+      setAllowInteraction(true);
+    }, 420);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [flashFirst]);
+
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!allowInteraction) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
@@ -25,11 +49,9 @@ const LusionImage = ({ src, alt }: { src: string; alt: string }) => {
   };
 
   const handleMouseEnter = () => {
-    // Trik 50ms Blur dari lu - INSTANT BLUR, SMOOTH UNBLUR
+    if (!allowInteraction) return;
     setHeroImgBlurred(true);
-    setTimeout(() => {
-      setHeroImgBlurred(false);
-    }, 50);
+    setTimeout(() => setHeroImgBlurred(false), 80);
   };
 
   const handleMouseLeave = () => {
@@ -43,26 +65,39 @@ const LusionImage = ({ src, alt }: { src: string; alt: string }) => {
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{ perspective: 1500 }}
-      className="relative w-full h-full min-h-[400px] rounded-3xl overflow-hidden cursor-crosshair group"
+      style={{ perspective: 1500, cursor: cursor }}
+      className="relative w-full h-full min-h-[400px] rounded-3xl overflow-hidden"
     >
-      <motion.div style={{ rotateX, rotateY }} className="w-full h-full origin-center relative">
+      <motion.div
+        style={{ rotateX, rotateY }}
+        className={`w-full h-full origin-center relative ${enableHoverZoom ? "group" : ""}`}
+      >
         <motion.img
           src={src}
           alt={alt}
-          animate={{ scale: 1.08 }} // Selalu sedikit zoom biar ga kepotong pas rotasi
-          transition={{ duration: 0.5 }}
+          whileHover={enableHoverZoom ? { scale: 1.04 } : {}}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="w-full h-full object-cover rounded-3xl"
           style={{
-            filter: heroImgBlurred 
-              ? "blur(15px) saturate(0.3) brightness(1.3)" 
+            filter: heroImgBlurred
+              ? "blur(15px) saturate(0.3) brightness(1.2)"
               : "blur(0px) saturate(1) brightness(1)",
-            transition: heroImgBlurred 
-              ? "none" // Blur instan tanpa delay
-              : "filter 0.8s cubic-bezier(0.16, 1, 0.3, 1)", // Balik mulus perlahan
+            transition: heroImgBlurred ? "none" : "filter 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         />
-        {/* Overlay dramatis ala awwwards */}
+
+        {/* Flash overlay */}
+        {flashVisible && (
+          <motion.div
+            initial={{ opacity: 1, scale: 0.8 }}
+            animate={{ opacity: 0, scale: 1.6 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="absolute inset-0 bg-white/90 rounded-3xl pointer-events-none"
+          />
+        )}
+
+        {/* Overlay dramatis */}
         <div className="absolute inset-0 bg-gradient-to-tr from-[#050505]/80 via-[#050505]/20 to-transparent pointer-events-none rounded-3xl" />
         <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none" />
       </motion.div>
@@ -231,6 +266,12 @@ export default function AboutPage() {
       {/* Grid Pattern Background ala Designer */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
+      {/* About specific orb background (distinct from global orbs) */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-28 -left-20 w-[520px] h-[520px] rounded-full blur-[140px]" style={{ background: 'radial-gradient(circle at 30% 30%, rgba(59,130,246,0.16), transparent 25%)' }} />
+        <div className="absolute bottom-[-18%] right-[-8%] w-[420px] h-[420px] rounded-full blur-[120px]" style={{ background: 'radial-gradient(circle at 70% 70%, rgba(16,185,129,0.12), transparent 28%)' }} />
+      </div>
+
       {/* HERO SECTION */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -302,7 +343,7 @@ export default function AboutPage() {
             className="lg:col-span-5 h-[500px] p-2 bg-white/5 rounded-[2.5rem] border border-white/10 shadow-2xl relative"
           >
             {/* Lusion Image Component dengan efek 50ms blur lu */}
-            <LusionImage src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?q=80&w=1000&auto=format&fit=crop" alt="Green Abstract" />
+            <LusionImage src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?q=80&w=1000&auto=format&fit=crop" alt="Green Abstract" cursor="default" flashFirst={true} enableHoverZoom={true} />
           </motion.div>
         </div>
 
@@ -317,7 +358,7 @@ export default function AboutPage() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 h-[600px] p-2 bg-white/5 rounded-[2.5rem] border border-white/10 shadow-2xl order-2 lg:order-1 relative"
           >
-            <LusionImage src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop" alt="Sprout" />
+            <LusionImage src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop" alt="Sprout" cursor="default" flashFirst={true} enableHoverZoom={true} />
             
             {/* Floating Card ala buatan lu yang di copy paste */}
             <motion.div

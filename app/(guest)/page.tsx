@@ -29,6 +29,8 @@ export default function HomePage() {
   const chartRef = useRef<HTMLDivElement>(null);
 
   const [heroImgBlurred, setHeroImgBlurred] = useState(false);
+  const [flashVisibleHome, setFlashVisibleHome] = useState(true);
+  const [allowHeroInteraction, setAllowHeroInteraction] = useState(false);
 
   // TIMELINE SCROLL (Tetap konsisten di tengah layar)
   const { scrollYProgress } = useScroll({
@@ -54,11 +56,22 @@ export default function HomePage() {
   }, []);
 
   const handleImageMouseEnter = () => {
+  if (!allowHeroInteraction) return;
   setHeroImgBlurred(true);
   setTimeout(() => {
     setHeroImgBlurred(false);
   }, 50);
 };
+
+  useEffect(() => {
+    // flash on load, then enable interaction
+    const t1 = setTimeout(() => setFlashVisibleHome(false), 380);
+    const t2 = setTimeout(() => setAllowHeroInteraction(true), 420);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, []);
 
   // Generate kurva dinamis berdasarkan tinggi kontainer
   const createCurvedPath = (height: number) => {
@@ -318,26 +331,36 @@ export default function HomePage() {
             style={{
               x: mousePosition.x * -15,
               y: mousePosition.y * -15,
-              scale: 1.05,
+              scale: 1,
             }}
             transition={{ type: "spring", damping: 30, stiffness: 100 }}
           >
-<img
+<motion.img
   src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80"
   alt="Hijau dan Energi"
   className="w-full h-full object-cover"
+  whileHover={allowHeroInteraction ? { scale: 1.04 } : {}}
   style={{
-    filter: heroImgBlurred 
-      ? "blur(12px) saturate(0.5)" 
+    filter: heroImgBlurred
+      ? "blur(12px) saturate(0.5)"
       : "blur(0px) saturate(1)",
-    transition: heroImgBlurred 
-      ? "none" 
-      : "filter 0.5s ease-out",
+    transition: heroImgBlurred ? "none" : "filter 0.5s ease-out",
   }}
+  transition={{ duration: 0.6 }}
 />
             <div className="absolute inset-0 bg-gradient-to-l from-[#050505] via-[#050505]/40 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
           </motion.div>
+
+          {/* Flash overlay on load */}
+          {flashVisibleHome && (
+            <motion.div
+              initial={{ opacity: 1, scale: 0.9 }}
+              animate={{ opacity: 0, scale: 1.5 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="absolute inset-0 bg-white/90 rounded-2xl pointer-events-none"
+            />
+          )}
 
           {/* Floating Card 1 */}
           <motion.div

@@ -32,13 +32,108 @@ body.light-theme {
   color: #111111 !important;
 }
 
-body.light-theme .text-white {
-  color: #111111 !important;
+body.light-theme {
+  background:
+    radial-gradient(circle at top left, rgba(16,185,129,0.12), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(59,130,246,0.1), transparent 28%),
+    #f4f7fb !important;
+  color: #0f172a !important;
 }
 
-body.light-theme .text-neutral-400 {
-  color: #555555 !important;
+body.light-theme nav,
+body.light-theme main,
+body.light-theme section,
+body.light-theme aside,
+body.light-theme footer,
+body.light-theme .bg-\[\#050505\],
+body.light-theme .bg-\[\#0a0a0a\]\/90,
+body.light-theme .bg-\[\#0f0f0f\]\/80,
+body.light-theme .bg-\[\#0B1120\],
+body.light-theme .bg-slate-950\/30,
+body.light-theme .bg-slate-950\/20,
+body.light-theme .bg-black\/60,
+body.light-theme .bg-black\/30,
+body.light-theme .bg-black\/20 {
+  background-color: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(18px);
+}
+
+body.light-theme .text-white,
+body.light-theme .text-neutral-200,
+body.light-theme .text-neutral-300,
+body.light-theme .text-neutral-400,
+body.light-theme .text-slate-200,
+body.light-theme .text-slate-300,
+body.light-theme .text-slate-400,
+body.light-theme .text-slate-500,
+body.light-theme .text-slate-600,
+body.light-theme .text-slate-700,
+body.light-theme .text-slate-800,
+body.light-theme .text-slate-900 {
+  color: #0f172a !important;
+}
+
+body.light-theme .text-slate-400,
+body.light-theme .text-slate-500,
+body.light-theme .text-slate-600 {
+  color: #475569 !important;
+}
+
+body.light-theme .border-white\/10,
+body.light-theme .border-white\/20,
+body.light-theme .border-white\/5,
+body.light-theme .border-white\/\[0\.06\],
+body.light-theme .border-white\/\[0\.08\] {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+body.light-theme .leaflet-popup-content-wrapper,
+body.light-theme .leaflet-popup-tip {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
+}
+
+body.light-theme .leaflet-container {
+  background: #edf3f8 !important;
 }
 
 .preserve-3d { transform-style: preserve-3d; }
 .transform-style-3d { transform-style: preserve-3d; transform: translateZ(50px); }
+
+/* When saving theme, add this helper to enable smooth 1s transitions */
+.theme-transition, .theme-transition * {
+  transition: background-color 1s ease-in-out, color 1s ease-in-out, border-color 1s ease-in-out, box-shadow 1s ease-in-out, transform 1s ease-in-out !important;
+}
+
+/* Theme-aware search input in map */
+.map-search-input {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #ffffff;
+}
+body.light-theme .map-search-input {
+  background: rgba(255,255,255,0.92) !important;
+  border-color: rgba(15,23,42,0.06) !important;
+  color: #0f172a !important;
+}
+
+/* Generic label helper for pages like About */
+.label-text { color: inherit; }
+
+/* Auth shell adjustments to make white-theme look polished */
+.auth-shell { background: #050505; color: #fff; }
+body.light-theme .auth-shell {
+  background: linear-gradient(180deg,#fbfdff 0%, #f0f6fb 100%) !important;
+  color: #0b1220 !important;
+}
+
+/* Orb color variables so orbs adapt to theme */
+:root {
+  --orb-1: rgba(88, 28, 135, 0.22);
+  --orb-2: rgba(4, 120, 87, 0.18);
+}
+body.light-theme {
+  --orb-1: rgba(168, 85, 247, 0.12);
+  --orb-2: rgba(16,185,129,0.12);
+}

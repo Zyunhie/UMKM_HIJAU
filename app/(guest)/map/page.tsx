@@ -58,7 +58,6 @@ interface UMKM {
 }
 
 // ─── Dummy Data: 7 UMKM Hijau di sekitar Kab. Tasikmalaya ───
-// Koordinat realistis di sekitar Kota Tasikmalaya (-7.3258, 108.2202)
 const UMKM_DATA: UMKM[] = [
   {
     id: 1,
@@ -267,8 +266,11 @@ export default function MapPage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="relative w-full h-screen bg-[#0B1120] overflow-hidden flex"
+      className="relative w-full h-[calc(100vh-9rem)] mt-28 px-3 md:px-4"
     >
+      <div className="relative mx-auto flex h-full w-full max-w-[1700px] overflow-hidden rounded-[30px] border border-white/10 bg-[#0b1120]/35 shadow-[0_40px_120px_rgba(15,23,42,0.8)] backdrop-blur-xl">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.12),transparent_35%)]" />
+
       {/* ─── CSS Animations ─── */}
       <style>{`
         @keyframes pulse-ring {
@@ -304,10 +306,11 @@ export default function MapPage() {
       {/* ═══════════════════════════════════════════
           SIDEBAR (30%)
           ═══════════════════════════════════════════ */}
-      <aside className="w-[30%] min-w-[340px] max-w-[420px] h-full flex flex-col border-r border-white/[0.06] bg-[#0B1120]/95 backdrop-blur-xl z-20">
+      <aside className="relative z-10 w-[30%] min-w-[340px] max-w-[420px] h-full flex flex-col border-r border-white/[0.06] bg-slate-950/30 backdrop-blur-2xl">
         {/* Header */}
-        <div className="p-5 pb-4 border-b border-white/[0.06]">
-          <div className="flex items-center gap-3 mb-5">
+        <div className="p-5 pt-6 pb-4 border-b border-white/[0.06]">
+          {/* ▼▼▼ PERUBAHAN: tambah padding-top dan atur ulang agar search tidak tertutup ▼▼▼ */}
+          <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
               <Leaf className="w-5 h-5 text-white" />
             </div>
@@ -322,14 +325,14 @@ export default function MapPage() {
           </div>
 
           {/* Search */}
-          <div className="relative mb-3">
+          <div className="relative mb-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input
               type="text"
               placeholder="Cari nama, alamat, atau kategori..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-9 py-2.5 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-slate-200 placeholder:text-slate-600 outline-none focus:border-emerald-500/40 focus:bg-white/[0.05] transition-all"
+              className="w-full pl-10 pr-9 py-3 rounded-xl text-sm placeholder:text-slate-600 outline-none focus:border-emerald-500/40 transition-all map-search-input"
             />
             {searchQuery && (
               <button
@@ -345,7 +348,7 @@ export default function MapPage() {
           <div className="flex gap-2">
             <button
               onClick={() => setActiveFilter("all")}
-              className={`flex-1 py-1.5 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
+              className={`flex-1 py-2 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
                 activeFilter === "all"
                   ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
                   : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-slate-300"
@@ -356,7 +359,7 @@ export default function MapPage() {
             </button>
             <button
               onClick={() => setActiveFilter("gold")}
-              className={`flex-1 py-1.5 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
+              className={`flex-1 py-2 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
                 activeFilter === "gold"
                   ? "bg-amber-500/15 border-amber-500/30 text-amber-400"
                   : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-slate-300"
@@ -367,7 +370,7 @@ export default function MapPage() {
             </button>
             <button
               onClick={() => setActiveFilter("silver")}
-              className={`flex-1 py-1.5 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
+              className={`flex-1 py-2 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
                 activeFilter === "silver"
                   ? "bg-slate-400/15 border-slate-400/30 text-slate-300"
                   : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-slate-300"
@@ -402,7 +405,7 @@ export default function MapPage() {
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.25 }}
                   onClick={() => handleSelectUMKM(umkm)}
-                  className={`group relative p-3.5 rounded-2xl cursor-pointer transition-all duration-200 border ${
+                  className={`group relative p-4 rounded-2xl cursor-pointer transition-all duration-200 border ${
                     selectedId === umkm.id
                       ? umkm.tier === "gold"
                         ? "bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/30 shadow-lg shadow-amber-500/5"
@@ -412,7 +415,7 @@ export default function MapPage() {
                 >
                   <div className="flex gap-3">
                     {/* Thumbnail */}
-                    <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 border border-white/[0.06]">
+                    <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-white/[0.06]">
                       <img
                         src={umkm.image}
                         alt={umkm.name}
@@ -435,10 +438,10 @@ export default function MapPage() {
                         </h3>
                         <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors flex-shrink-0 mt-0.5" />
                       </div>
-                      <p className="text-slate-500 text-[11px] mt-0.5 truncate">
+                      <p className="text-slate-500 text-[11px] mt-1 truncate">
                         📍 {umkm.address}
                       </p>
-                      <div className="flex items-center gap-3 mt-2">
+                      <div className="flex items-center gap-2 mt-2">
                         <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
                           <TrendingDown className="w-3 h-3" />
                           Hemat {umkm.savingsPercent}%
@@ -474,7 +477,7 @@ export default function MapPage() {
       {/* ═══════════════════════════════════════════
           MAP (70%)
           ═══════════════════════════════════════════ */}
-      <div className="flex-1 relative">
+      <div className="relative z-10 flex-1 min-w-0 bg-slate-950/20 backdrop-blur-xl">
         <MapContainer
           center={[-7.3258, 108.2202]}
           zoom={13}
@@ -585,7 +588,7 @@ export default function MapPage() {
 
         {/* ─── Map Overlay Controls ─── */}
         {/* Legend */}
-        <div className="absolute bottom-6 left-6 z-[400] bg-[#0f172a]/90 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 shadow-2xl">
+        <div className="absolute bottom-6 left-6 z-[400] bg-[#0f172a]/80 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 shadow-[0_20px_40px_rgba(15,23,42,0.45)]">
           <p className="text-white text-xs font-bold mb-3">Legenda</p>
           <div className="space-y-2.5">
             <div className="flex items-center gap-2.5">
@@ -602,98 +605,7 @@ export default function MapPage() {
             </div>
           </div>
         </div>
-
-        {/* Selected UMKM Detail Card (floating) */}
-        <AnimatePresence>
-          {selectedUMKM && (
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="absolute bottom-6 right-6 z-[400] w-[340px] bg-[#0f172a]/95 backdrop-blur-xl border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl"
-            >
-              {/* Image */}
-              <div className="relative h-32">
-                <img
-                  src={selectedUMKM.image}
-                  alt={selectedUMKM.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent" />
-                <button
-                  onClick={() => setSelectedId(null)}
-                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-black/60 transition-colors"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-                <div
-                  className={`absolute top-2 left-2 px-2.5 py-1 rounded-lg text-[10px] font-extrabold tracking-wide uppercase ${
-                    selectedUMKM.tier === "gold"
-                      ? "bg-amber-500 text-white shadow-lg shadow-amber-500/30"
-                      : "bg-slate-400 text-white shadow-lg shadow-slate-400/30"
-                  }`}
-                >
-                  {selectedUMKM.tier === "gold" ? "🥇 Gold Tier" : "🥈 Silver Tier"}
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-4">
-                <h3 className="text-white font-bold text-base mb-1">
-                  {selectedUMKM.name}
-                </h3>
-                <p className="text-slate-400 text-xs mb-3 leading-relaxed">
-                  {selectedUMKM.address}
-                </p>
-
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-2.5">
-                    <div className="flex items-center gap-1.5 text-emerald-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
-                      <Zap className="w-3 h-3" />
-                      Penghematan
-                    </div>
-                    <div className="text-white font-bold text-lg">
-                      {selectedUMKM.savingsPercent}%
-                    </div>
-                  </div>
-                  <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-2.5">
-                    <div className="flex items-center gap-1.5 text-blue-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
-                      <Star className="w-3 h-3 fill-blue-400" />
-                      Rating
-                    </div>
-                    <div className="text-white font-bold text-lg">
-                      {selectedUMKM.rating}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-1.5 mb-4">
-                  <div className="flex items-center gap-2 text-slate-400 text-[11px]">
-                    <Phone className="w-3.5 h-3.5 text-slate-500" />
-                    {selectedUMKM.phone}
-                  </div>
-                  <div className="flex items-center gap-2 text-slate-400 text-[11px]">
-                    <Clock className="w-3.5 h-3.5 text-slate-500" />
-                    {selectedUMKM.openHours}
-                  </div>
-                  <div className="flex items-center gap-2 text-slate-400 text-[11px]">
-                    <MapPin className="w-3.5 h-3.5 text-slate-500" />
-                    {selectedUMKM.category}
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => handleNavigate(selectedUMKM)}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 text-white text-sm font-bold flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.97] group"
-                >
-                  <Navigation className="w-4 h-4 group-hover:animate-bounce" />
-                  Navigasi ke Sini
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      </div>
       </div>
     </motion.main>
   );

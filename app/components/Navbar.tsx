@@ -28,16 +28,38 @@ const LusionButton = ({ text }: { text: string }) => {
 const RippleGearButton = () => {
   const [coords, setCoords] = useState({ x: -1, y: -1 });
   const [isHovering, setIsHovering] = useState(false);
-  
+
   // State Modal & Tema
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewTheme, setPreviewTheme] = useState<"dark" | "white">("dark");
   const [mounted, setMounted] = useState(false);
 
-  // Pastikan render portal hanya di client side
+  // Pastikan render portal hanya di client side dan baca preferensi yang tersimpan
   useEffect(() => {
     setMounted(true);
+    try {
+      const saved = localStorage.getItem("site-theme");
+      if (saved === "white") {
+        setPreviewTheme("white");
+        document.body.classList.add("light-theme");
+      } else {
+        setPreviewTheme("dark");
+        document.body.classList.remove("light-theme");
+      }
+    } catch (e) {
+      // ignore
+    }
   }, []);
+
+  // Live preview saat user pilih opsi sebelum disave
+  useEffect(() => {
+    if (!mounted) return;
+    if (previewTheme === "white") {
+      document.body.classList.add("light-theme");
+    } else {
+      document.body.classList.remove("light-theme");
+    }
+  }, [previewTheme, mounted]);
 
   const handleMouseMove = (e: MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -46,12 +68,26 @@ const RippleGearButton = () => {
 
   const handleSaveTheme = () => {
     setIsModalOpen(false);
-    if (previewTheme === "white") {
-      document.body.classList.add("light-theme");
-    } else {
-      document.body.classList.remove("light-theme");
+    try {
+      localStorage.setItem("site-theme", previewTheme);
+    } catch (e) {
+      // ignore
     }
   };
+
+  // Apply a short transition when saving theme so change feels smooth
+  const handleSaveWithTransition = () => {
+    // add a helper class to enable 1s transitions
+    document.body.classList.add("theme-transition");
+    handleSaveTheme();
+    setTimeout(() => {
+      document.body.classList.remove("theme-transition");
+    }, 1000);
+  };
+
+  const modalBgClass = previewTheme === "white"
+    ? "bg-white text-black border border-slate-200"
+    : "bg-[#111111] text-white border border-white/20";
 
   return (
     <>
@@ -110,17 +146,16 @@ const RippleGearButton = () => {
         <AnimatePresence>
           {isModalOpen && (
             <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4" style={{ perspective: "1200px" }}>
-              
-              {/* OVERLAY GELAP UNTUK SELURUH HALAMAN (Gak bisa diklik) */}
+              {/* OVERLAY */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="fixed inset-0 bg-black/70 backdrop-blur-md"
+                className="fixed inset-0 bg-black/40 backdrop-blur-sm"
               />
 
-              {/* MODAL KERTAS - GUARANTEED DEAD CENTER */}
+              {/* MODAL */}
               <motion.div
                 initial={{ 
                   opacity: 0, 
@@ -158,14 +193,13 @@ const RippleGearButton = () => {
                   y: 20, 
                   transition: { duration: 0.25, ease: "easeOut" } 
                 }}
-                className="relative z-10 w-full max-w-sm bg-[#111111] border border-white/20 rounded-2xl p-6 shadow-[0_0_60px_rgba(34,197,94,0.2)] flex flex-col"
+                className={`relative z-10 w-full max-w-sm ${modalBgClass} rounded-2xl p-6 shadow-[0_20px_60px_rgba(2,6,23,0.6)] flex flex-col`}
               >
-                <h2 className="text-2xl font-black text-white mb-2 tracking-tight text-center">Settings</h2>
-                <p className="text-neutral-400 text-sm text-center mb-6">Choose your environment theme.</p>
+                <h2 className={`text-2xl font-black mb-2 tracking-tight text-center ${previewTheme === 'white' ? 'text-slate-900' : 'text-white'}`}>Settings</h2>
+                <p className={`mb-6 text-sm text-center ${previewTheme === 'white' ? 'text-slate-600' : 'text-neutral-400'}`}>Choose your environment theme.</p>
 
                 {/* Theme Selection */}
                 <div className="grid grid-cols-2 gap-3 mb-8">
-                  {/* Dark */}
                   <button
                     onClick={() => setPreviewTheme("dark")}
                     className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
@@ -178,7 +212,6 @@ const RippleGearButton = () => {
                     <span className="text-sm font-bold">Dark</span>
                   </button>
 
-                  {/* White */}
                   <button
                     onClick={() => setPreviewTheme("white")}
                     className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
@@ -196,12 +229,12 @@ const RippleGearButton = () => {
                 <div className="flex gap-3">
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-sm transition-all"
+                    className={`flex-1 py-3 rounded-xl ${previewTheme === 'white' ? 'bg-slate-100 text-slate-900 hover:bg-slate-200' : 'bg-white/5 hover:bg-white/10 text-white'} font-semibold text-sm transition-all`}
                   >
                     Cancel
                   </button>
                   <button
-                    onClick={handleSaveTheme}
+                    onClick={handleSaveWithTransition}
                     className="flex-1 py-3 rounded-xl bg-green-500 hover:bg-green-400 text-black font-extrabold text-sm shadow-[0_0_15px_rgba(34,197,94,0.3)] transition-all"
                   >
                     Save Theme

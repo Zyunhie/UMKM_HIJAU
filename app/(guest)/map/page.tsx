@@ -27,9 +27,13 @@ import {
 } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 
-// ─── Fix Leaflet default icons ───
+// ─────────────────────────────────────────────
+// Fix Leaflet default icons
+// ─────────────────────────────────────────────
+
 // @ts-ignore
 delete L.Icon.Default.prototype._getIconUrl;
+
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
@@ -39,7 +43,10 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-// ─── Types ───
+// ─────────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────────
+
 type Tier = "gold" | "silver";
 
 interface UMKM {
@@ -57,7 +64,10 @@ interface UMKM {
   image: string;
 }
 
-// ─── Dummy Data: 7 UMKM Hijau di sekitar Kab. Tasikmalaya ───
+// ─────────────────────────────────────────────
+// Dummy Data
+// ─────────────────────────────────────────────
+
 const UMKM_DATA: UMKM[] = [
   {
     id: 1,
@@ -71,7 +81,8 @@ const UMKM_DATA: UMKM[] = [
     category: "Kuliner",
     phone: "+62 812-3456-7890",
     openHours: "07:00 - 21:00",
-    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400",
+    image:
+      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400",
   },
   {
     id: 2,
@@ -85,7 +96,8 @@ const UMKM_DATA: UMKM[] = [
     category: "Kerajinan",
     phone: "+62 813-9876-5432",
     openHours: "08:00 - 17:00",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400",
+    image:
+      "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400",
   },
   {
     id: 3,
@@ -99,7 +111,8 @@ const UMKM_DATA: UMKM[] = [
     category: "Oleh-oleh",
     phone: "+62 811-2233-4455",
     openHours: "08:00 - 20:00",
-    image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=400",
+    image:
+      "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=400",
   },
   {
     id: 4,
@@ -113,7 +126,8 @@ const UMKM_DATA: UMKM[] = [
     category: "Kuliner",
     phone: "+62 814-5566-7788",
     openHours: "10:00 - 23:00",
-    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400",
+    image:
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400",
   },
   {
     id: 5,
@@ -127,7 +141,8 @@ const UMKM_DATA: UMKM[] = [
     category: "Kerajinan",
     phone: "+62 815-6677-8899",
     openHours: "08:00 - 16:00",
-    image: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=400",
+    image:
+      "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=400",
   },
   {
     id: 6,
@@ -141,7 +156,8 @@ const UMKM_DATA: UMKM[] = [
     category: "Kuliner",
     phone: "+62 816-7788-9900",
     openHours: "10:00 - 22:00",
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400",
+    image:
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400",
   },
   {
     id: 7,
@@ -155,11 +171,15 @@ const UMKM_DATA: UMKM[] = [
     category: "Layanan",
     phone: "+62 817-8899-0011",
     openHours: "07:00 - 20:00",
-    image: "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400",
+    image:
+      "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400",
   },
 ];
 
-// ─── Custom Marker Icons ───
+// ─────────────────────────────────────────────
+// Custom Marker Icons
+// ─────────────────────────────────────────────
+
 const goldIcon = L.divIcon({
   className: "custom-marker",
   html: `
@@ -204,7 +224,10 @@ const userIcon = L.divIcon({
   iconAnchor: [10, 10],
 });
 
-// ─── Map FlyTo Component ───
+// ─────────────────────────────────────────────
+// Map FlyTo Component
+// ─────────────────────────────────────────────
+
 function FlyToLocation({
   lat,
   lng,
@@ -215,397 +238,1092 @@ function FlyToLocation({
   trigger: number;
 }) {
   const map = useMap();
+
   useMemo(() => {
     if (trigger > 0) {
-      map.flyTo([lat, lng], 16, { duration: 1.2 });
+      map.flyTo([lat, lng], 16, {
+        duration: 1.2,
+      });
     }
   }, [lat, lng, trigger, map]);
+
   return null;
 }
 
-// ─── Main Component ───
+// ─────────────────────────────────────────────
+// Main Component
+// ─────────────────────────────────────────────
+
 export default function MapPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState<"all" | Tier>("all");
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [activeFilter, setActiveFilter] =
+    useState<"all" | Tier>("all");
+  const [selectedId, setSelectedId] =
+    useState<number | null>(null);
   const [flyTrigger, setFlyTrigger] = useState(0);
 
+  // ─────────────────────────────────────────
   // Filter UMKM
+  // ─────────────────────────────────────────
+
   const filteredUMKM = useMemo(() => {
     return UMKM_DATA.filter((u) => {
+      const normalizedSearch =
+        searchQuery.toLowerCase();
+
       const matchesSearch =
-        u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        u.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        u.category.toLowerCase().includes(searchQuery.toLowerCase());
+        u.name
+          .toLowerCase()
+          .includes(normalizedSearch) ||
+        u.address
+          .toLowerCase()
+          .includes(normalizedSearch) ||
+        u.category
+          .toLowerCase()
+          .includes(normalizedSearch);
+
       const matchesFilter =
-        activeFilter === "all" || u.tier === activeFilter;
+        activeFilter === "all" ||
+        u.tier === activeFilter;
+
       return matchesSearch && matchesFilter;
     });
   }, [searchQuery, activeFilter]);
 
+  // ─────────────────────────────────────────
+  // Selected UMKM
+  // ─────────────────────────────────────────
+
   const selectedUMKM = useMemo(
-    () => UMKM_DATA.find((u) => u.id === selectedId) || null,
+    () =>
+      UMKM_DATA.find(
+        (u) => u.id === selectedId
+      ) || null,
     [selectedId]
   );
 
-  const handleNavigate = useCallback((umkm: UMKM) => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${umkm.lat},${umkm.lng}&travelmode=driving`;
-    window.open(url, "_blank");
-  }, []);
+  // ─────────────────────────────────────────
+  // Navigation
+  // ─────────────────────────────────────────
 
-  const handleSelectUMKM = useCallback((umkm: UMKM) => {
-    setSelectedId(umkm.id);
-    setFlyTrigger((prev) => prev + 1);
-  }, []);
+  const handleNavigate = useCallback(
+    (umkm: UMKM) => {
+      const url =
+        `https://www.google.com/maps/dir/?api=1` +
+        `&destination=${umkm.lat},${umkm.lng}` +
+        `&travelmode=driving`;
 
-  const goldCount = UMKM_DATA.filter((u) => u.tier === "gold").length;
-  const silverCount = UMKM_DATA.filter((u) => u.tier === "silver").length;
+      window.open(url, "_blank");
+    },
+    []
+  );
+
+  // ─────────────────────────────────────────
+  // Select UMKM
+  // ─────────────────────────────────────────
+
+  const handleSelectUMKM = useCallback(
+    (umkm: UMKM) => {
+      setSelectedId(umkm.id);
+      setFlyTrigger((prev) => prev + 1);
+    },
+    []
+  );
+
+  const goldCount = UMKM_DATA.filter(
+    (u) => u.tier === "gold"
+  ).length;
+
+  const silverCount = UMKM_DATA.filter(
+    (u) => u.tier === "silver"
+  ).length;
+
+  // ─────────────────────────────────────────
+  // Render
+  // ─────────────────────────────────────────
 
   return (
     <motion.main
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="relative w-full h-[calc(100vh-9rem)] mt-28 px-3 md:px-4"
+      className="
+        relative
+        w-full
+        h-[calc(100vh-9rem)]
+        mt-28
+        px-3
+        md:px-4
+      "
     >
-      <div className="relative mx-auto flex h-full w-full max-w-[1700px] overflow-hidden rounded-[30px] border border-white/10 bg-[#0b1120]/35 shadow-[0_40px_120px_rgba(15,23,42,0.8)] backdrop-blur-xl">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.12),transparent_35%)]" />
+      <div
+        className="
+          relative
+          mx-auto
+          flex
+          h-full
+          w-full
+          max-w-[1700px]
+          overflow-hidden
+          rounded-[30px]
+          border
+          border-white/10
+          bg-[#0b1120]/35
+          shadow-[0_40px_120px_rgba(15,23,42,0.8)]
+          backdrop-blur-xl
+        "
+      >
+        {/* ═══════════════════════════════════════
+            AMBIENT ORB BACKGROUND
+            ═══════════════════════════════════════ */}
 
-      {/* ─── CSS Animations ─── */}
-      <style>{`
-        @keyframes pulse-ring {
-          0% { transform: scale(1); opacity: 0.6; }
-          100% { transform: scale(1.6); opacity: 0; }
-        }
-        .leaflet-popup-content-wrapper {
-          background: rgba(15, 23, 42, 0.95) !important;
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 16px !important;
-          color: #fff;
-          padding: 0 !important;
-          overflow: hidden;
-        }
-        .leaflet-popup-tip {
-          background: rgba(15, 23, 42, 0.95) !important;
-          border: 1px solid rgba(255,255,255,0.08);
-        }
-        .leaflet-popup-content {
-          margin: 0 !important;
-          width: 280px !important;
-        }
-        .leaflet-container {
-          background: #0f172a;
-        }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-      `}</style>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* ─────────────────────────────────────
+              Orb 1 — Emerald
+              Top left
+              ───────────────────────────────────── */}
 
-      {/* ═══════════════════════════════════════════
-          SIDEBAR (30%)
-          ═══════════════════════════════════════════ */}
-      <aside className="relative z-10 w-[30%] min-w-[340px] max-w-[420px] h-full flex flex-col border-r border-white/[0.06] bg-slate-950/30 backdrop-blur-2xl">
-        {/* Header */}
-        <div className="p-5 pt-6 pb-4 border-b border-white/[0.06]">
-          {/* ▼▼▼ PERUBAHAN: tambah padding-top dan atur ulang agar search tidak tertutup ▼▼▼ */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-              <Leaf className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h1 className="text-white font-bold text-base leading-tight">
-                UMKM Hijau Map
-              </h1>
-              <p className="text-slate-500 text-[11px]">
-                Kab. Tasikmalaya & sekitarnya
-              </p>
-            </div>
-          </div>
-
-          {/* Search */}
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <input
-              type="text"
-              placeholder="Cari nama, alamat, atau kategori..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-9 py-3 rounded-xl text-sm placeholder:text-slate-600 outline-none focus:border-emerald-500/40 transition-all map-search-input"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Filter Pills */}
-          <div className="flex gap-2">
-            <button
-              onClick={() => setActiveFilter("all")}
-              className={`flex-1 py-2 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
-                activeFilter === "all"
-                  ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
-                  : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-slate-300"
-              }`}
-            >
-              <Filter className="w-3 h-3 inline mr-1 -mt-0.5" />
-              Semua ({UMKM_DATA.length})
-            </button>
-            <button
-              onClick={() => setActiveFilter("gold")}
-              className={`flex-1 py-2 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
-                activeFilter === "gold"
-                  ? "bg-amber-500/15 border-amber-500/30 text-amber-400"
-                  : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-slate-300"
-              }`}
-            >
-              <Award className="w-3 h-3 inline mr-1 -mt-0.5" />
-              Gold ({goldCount})
-            </button>
-            <button
-              onClick={() => setActiveFilter("silver")}
-              className={`flex-1 py-2 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
-                activeFilter === "silver"
-                  ? "bg-slate-400/15 border-slate-400/30 text-slate-300"
-                  : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-slate-300"
-              }`}
-            >
-              <Award className="w-3 h-3 inline mr-1 -mt-0.5" />
-              Silver ({silverCount})
-            </button>
-          </div>
-        </div>
-
-        {/* List */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2.5">
-          <AnimatePresence mode="popLayout">
-            {filteredUMKM.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center py-16 text-slate-600"
-              >
-                <Search className="w-10 h-10 mb-3 opacity-30" />
-                <p className="text-sm">Tidak ada UMKM ditemukan</p>
-                <p className="text-xs mt-1">Coba kata kunci lain</p>
-              </motion.div>
-            ) : (
-              filteredUMKM.map((umkm) => (
-                <motion.div
-                  key={umkm.id}
-                  layout
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.25 }}
-                  onClick={() => handleSelectUMKM(umkm)}
-                  className={`group relative p-4 rounded-2xl cursor-pointer transition-all duration-200 border ${
-                    selectedId === umkm.id
-                      ? umkm.tier === "gold"
-                        ? "bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/30 shadow-lg shadow-amber-500/5"
-                        : "bg-gradient-to-br from-slate-400/10 to-slate-500/5 border-slate-400/30 shadow-lg shadow-slate-400/5"
-                      : "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.1]"
-                  }`}
-                >
-                  <div className="flex gap-3">
-                    {/* Thumbnail */}
-                    <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-white/[0.06]">
-                      <img
-                        src={umkm.image}
-                        alt={umkm.name}
-                        className="w-full h-full object-cover"
-                      />
-                      <div
-                        className={`absolute top-0 right-0 w-5 h-5 flex items-center justify-center text-[10px] ${
-                          umkm.tier === "gold" ? "bg-amber-500" : "bg-slate-400"
-                        } rounded-bl-lg`}
-                      >
-                        {umkm.tier === "gold" ? "🥇" : "🥈"}
-                      </div>
-                    </div>
-
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className="text-white font-semibold text-[13px] leading-snug truncate">
-                          {umkm.name}
-                        </h3>
-                        <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors flex-shrink-0 mt-0.5" />
-                      </div>
-                      <p className="text-slate-500 text-[11px] mt-1 truncate">
-                        📍 {umkm.address}
-                      </p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
-                          <TrendingDown className="w-3 h-3" />
-                          Hemat {umkm.savingsPercent}%
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md">
-                          <Star className="w-3 h-3 fill-blue-400" />
-                          {umkm.rating}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Footer Stats */}
-        <div className="p-4 border-t border-white/[0.06] bg-white/[0.01]">
-          <div className="flex items-center justify-between text-[11px] text-slate-500">
-            <span>Total UMKM Hijau</span>
-            <span className="text-white font-bold">{UMKM_DATA.length} Lokasi</span>
-          </div>
-          <div className="w-full h-1.5 bg-white/[0.04] rounded-full mt-2 overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-amber-500 to-slate-400 rounded-full transition-all duration-500"
-              style={{ width: `${(goldCount / UMKM_DATA.length) * 100}%` }}
-            />
-          </div>
-        </div>
-      </aside>
-
-      {/* ═══════════════════════════════════════════
-          MAP (70%)
-          ═══════════════════════════════════════════ */}
-      <div className="relative z-10 flex-1 min-w-0 bg-slate-950/20 backdrop-blur-xl">
-        <MapContainer
-          center={[-7.3258, 108.2202]}
-          zoom={13}
-          scrollWheelZoom={true}
-          className="w-full h-full"
-          zoomControl={false}
-        >
-          {/* Dark Mode Tiles */}
-          <TileLayer
-            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          <motion.div
+            className="
+              absolute
+              -top-40
+              -left-40
+              w-[520px]
+              h-[520px]
+              rounded-full
+              bg-emerald-500/[0.14]
+              blur-[140px]
+            "
+            animate={{
+              x: [0, 45, -20, 0],
+              y: [0, 25, -15, 0],
+              scale: [1, 1.08, 0.96, 1],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
           />
 
-          {/* User Location Marker (Tasikmalaya center) */}
-          <Marker position={[-7.3258, 108.2202]} icon={userIcon}>
-            <Popup>
-              <div className="p-3 text-center">
-                <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-2">
-                  <MapPin className="w-4 h-4 text-emerald-400" />
-                </div>
-                <p className="text-white font-semibold text-sm">Lokasi Kamu</p>
-                <p className="text-slate-400 text-xs mt-1">Kab. Tasikmalaya</p>
-              </div>
-            </Popup>
-          </Marker>
+          {/* ─────────────────────────────────────
+              Orb 2 — Violet
+              Right side
+              ───────────────────────────────────── */}
 
-          {/* UMKM Markers */}
-          {filteredUMKM.map((umkm) => (
+          <motion.div
+            className="
+              absolute
+              top-[8%]
+              -right-48
+              w-[560px]
+              h-[560px]
+              rounded-full
+              bg-violet-500/[0.11]
+              blur-[150px]
+            "
+            animate={{
+              x: [0, -45, 25, 0],
+              y: [0, 55, -30, 0],
+              scale: [1, 0.94, 1.08, 1],
+            }}
+            transition={{
+              duration: 18,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1.5,
+            }}
+          />
+
+          {/* ─────────────────────────────────────
+              Orb 3 — Cyan
+              Bottom center
+              ───────────────────────────────────── */}
+
+          <motion.div
+            className="
+              absolute
+              -bottom-56
+              left-[35%]
+              w-[600px]
+              h-[600px]
+              rounded-full
+              bg-cyan-400/[0.08]
+              blur-[160px]
+            "
+            animate={{
+              x: [0, -50, 35, 0],
+              y: [0, -35, 25, 0],
+              scale: [1, 1.09, 0.95, 1],
+            }}
+            transition={{
+              duration: 21,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2,
+            }}
+          />
+
+          {/* ─────────────────────────────────────
+              Orb 4 — Lime Accent
+              Middle-left
+              ───────────────────────────────────── */}
+
+          <motion.div
+            className="
+              absolute
+              top-[34%]
+              left-[18%]
+              w-[260px]
+              h-[260px]
+              rounded-full
+              bg-lime-400/[0.055]
+              blur-[100px]
+            "
+            animate={{
+              x: [0, 30, -25, 0],
+              y: [0, -40, 25, 0],
+              scale: [1, 1.12, 0.92, 1],
+              opacity: [0.5, 1, 0.55, 0.5],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 3,
+            }}
+          />
+
+          {/* ─────────────────────────────────────
+              Orb 5 — Emerald accent kecil
+              Bottom right
+              ───────────────────────────────────── */}
+
+          <motion.div
+            className="
+              absolute
+              -bottom-20
+              -right-10
+              w-[260px]
+              h-[260px]
+              rounded-full
+              bg-emerald-400/[0.07]
+              blur-[100px]
+            "
+            animate={{
+              x: [0, -25, 15, 0],
+              y: [0, -25, 20, 0],
+              scale: [1, 0.9, 1.08, 1],
+            }}
+            transition={{
+              duration: 13,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 4,
+            }}
+          />
+
+          {/* ─────────────────────────────────────
+              Subtle center atmosphere
+              ───────────────────────────────────── */}
+
+          <div
+            className="
+              absolute
+              inset-0
+              bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.035),transparent_58%)]
+            "
+          />
+
+          {/* ─────────────────────────────────────
+              Very subtle vignette
+              ───────────────────────────────────── */}
+
+          <div
+            className="
+              absolute
+              inset-0
+              bg-[radial-gradient(circle_at_center,transparent_30%,rgba(2,6,23,0.28)_100%)]
+            "
+          />
+        </div>
+
+        {/* ═══════════════════════════════════════
+            CSS ANIMATIONS
+            ═══════════════════════════════════════ */}
+
+        <style>{`
+          @keyframes pulse-ring {
+            0% {
+              transform: scale(1);
+              opacity: 0.6;
+            }
+
+            100% {
+              transform: scale(1.6);
+              opacity: 0;
+            }
+          }
+
+          .leaflet-popup-content-wrapper {
+            background: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px !important;
+            color: #fff;
+            padding: 0 !important;
+            overflow: hidden;
+          }
+
+          .leaflet-popup-tip {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border: 1px solid rgba(255,255,255,0.08);
+          }
+
+          .leaflet-popup-content {
+            margin: 0 !important;
+            width: 280px !important;
+          }
+
+          .leaflet-container {
+            background: #0f172a;
+          }
+
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+          }
+
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+          }
+
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+          }
+
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2);
+          }
+
+          /*
+            Make the ambience slightly softer
+            on smaller screens.
+          */
+          @media (max-width: 768px) {
+            .map-orb {
+              transform: scale(0.7);
+            }
+          }
+        `}</style>
+
+        {/* ═══════════════════════════════════════
+            SIDEBAR
+            ═══════════════════════════════════════ */}
+
+        <aside
+          className="
+            relative
+            z-10
+            w-[30%]
+            min-w-[340px]
+            max-w-[420px]
+            h-full
+            flex
+            flex-col
+            border-r
+            border-white/[0.06]
+            bg-slate-950/30
+            backdrop-blur-2xl
+          "
+        >
+          {/* Header */}
+
+          <div
+            className="
+              p-5
+              pt-6
+              pb-4
+              border-b
+              border-white/[0.06]
+            "
+          >
+            {/* Brand */}
+
+            <div className="flex items-center gap-3 mb-6">
+              <div
+                className="
+                  w-10
+                  h-10
+                  rounded-xl
+                  bg-gradient-to-br
+                  from-emerald-500
+                  to-blue-600
+                  flex
+                  items-center
+                  justify-center
+                  shadow-lg
+                  shadow-emerald-500/20
+                "
+              >
+                <Leaf className="w-5 h-5 text-white" />
+              </div>
+
+              <div>
+                <h1 className="text-white font-bold text-base leading-tight">
+                  UMKM Hijau Map
+                </h1>
+
+                <p className="text-slate-500 text-[11px]">
+                  Kab. Tasikmalaya & sekitarnya
+                </p>
+              </div>
+            </div>
+
+            {/* Search */}
+
+            <div className="relative mb-4">
+              <Search
+                className="
+                  absolute
+                  left-3
+                  top-1/2
+                  -translate-y-1/2
+                  w-4
+                  h-4
+                  text-slate-500
+                "
+              />
+
+              <input
+                type="text"
+                placeholder="Cari nama, alamat, atau kategori..."
+                value={searchQuery}
+                onChange={(e) =>
+                  setSearchQuery(e.target.value)
+                }
+                className="
+                  w-full
+                  pl-10
+                  pr-9
+                  py-3
+                  rounded-xl
+                  text-sm
+                  placeholder:text-slate-600
+                  outline-none
+                  focus:border-emerald-500/40
+                  transition-all
+                  map-search-input
+                  bg-white/[0.03]
+                  border
+                  border-white/[0.06]
+                  text-white
+                "
+              />
+
+              {searchQuery && (
+                <button
+                  onClick={() =>
+                    setSearchQuery("")
+                  }
+                  className="
+                    absolute
+                    right-3
+                    top-1/2
+                    -translate-y-1/2
+                    text-slate-500
+                    hover:text-slate-300
+                    transition-colors
+                  "
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Filter */}
+
+            <div className="flex gap-2">
+              <button
+                onClick={() =>
+                  setActiveFilter("all")
+                }
+                className={`flex-1 py-2 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
+                  activeFilter === "all"
+                    ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
+                    : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                <Filter className="w-3 h-3 inline mr-1 -mt-0.5" />
+                Semua ({UMKM_DATA.length})
+              </button>
+
+              <button
+                onClick={() =>
+                  setActiveFilter("gold")
+                }
+                className={`flex-1 py-2 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
+                  activeFilter === "gold"
+                    ? "bg-amber-500/15 border-amber-500/30 text-amber-400"
+                    : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                <Award className="w-3 h-3 inline mr-1 -mt-0.5" />
+                Gold ({goldCount})
+              </button>
+
+              <button
+                onClick={() =>
+                  setActiveFilter("silver")
+                }
+                className={`flex-1 py-2 px-3 rounded-lg text-[11px] font-semibold transition-all border ${
+                  activeFilter === "silver"
+                    ? "bg-slate-400/15 border-slate-400/30 text-slate-300"
+                    : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                <Award className="w-3 h-3 inline mr-1 -mt-0.5" />
+                Silver ({silverCount})
+              </button>
+            </div>
+          </div>
+
+          {/* List */}
+
+          <div
+            className="
+              flex-1
+              overflow-y-auto
+              custom-scrollbar
+              p-3
+              space-y-2.5
+            "
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredUMKM.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="
+                    flex
+                    flex-col
+                    items-center
+                    justify-center
+                    py-16
+                    text-slate-600
+                  "
+                >
+                  <Search className="w-10 h-10 mb-3 opacity-30" />
+
+                  <p className="text-sm">
+                    Tidak ada UMKM ditemukan
+                  </p>
+
+                  <p className="text-xs mt-1">
+                    Coba kata kunci lain
+                  </p>
+                </motion.div>
+              ) : (
+                filteredUMKM.map((umkm) => (
+                  <motion.div
+                    key={umkm.id}
+                    layout
+                    initial={{
+                      opacity: 0,
+                      x: -20,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      x: -20,
+                    }}
+                    transition={{
+                      duration: 0.25,
+                    }}
+                    onClick={() =>
+                      handleSelectUMKM(umkm)
+                    }
+                    className={`group relative p-4 rounded-2xl cursor-pointer transition-all duration-200 border ${
+                      selectedId === umkm.id
+                        ? umkm.tier === "gold"
+                          ? "bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/30 shadow-lg shadow-amber-500/5"
+                          : "bg-gradient-to-br from-slate-400/10 to-slate-500/5 border-slate-400/30 shadow-lg shadow-slate-400/5"
+                        : "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.1]"
+                    }`}
+                  >
+                    <div className="flex gap-3">
+                      {/* Thumbnail */}
+
+                      <div
+                        className="
+                          relative
+                          w-16
+                          h-16
+                          rounded-xl
+                          overflow-hidden
+                          flex-shrink-0
+                          border
+                          border-white/[0.06]
+                        "
+                      >
+                        <img
+                          src={umkm.image}
+                          alt={umkm.name}
+                          className="
+                            w-full
+                            h-full
+                            object-cover
+                          "
+                        />
+
+                        <div
+                          className={`absolute top-0 right-0 w-5 h-5 flex items-center justify-center text-[10px] ${
+                            umkm.tier === "gold"
+                              ? "bg-amber-500"
+                              : "bg-slate-400"
+                          } rounded-bl-lg`}
+                        >
+                          {umkm.tier === "gold"
+                            ? "🥇"
+                            : "🥈"}
+                        </div>
+                      </div>
+
+                      {/* Info */}
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <h3
+                            className="
+                              text-white
+                              font-semibold
+                              text-[13px]
+                              leading-snug
+                              truncate
+                            "
+                          >
+                            {umkm.name}
+                          </h3>
+
+                          <ChevronRight
+                            className="
+                              w-4
+                              h-4
+                              text-slate-600
+                              group-hover:text-slate-400
+                              transition-colors
+                              flex-shrink-0
+                              mt-0.5
+                            "
+                          />
+                        </div>
+
+                        <p
+                          className="
+                            text-slate-500
+                            text-[11px]
+                            mt-1
+                            truncate
+                          "
+                        >
+                          📍 {umkm.address}
+                        </p>
+
+                        <div className="flex items-center gap-2 mt-2">
+                          <span
+                            className="
+                              inline-flex
+                              items-center
+                              gap-1
+                              text-[10px]
+                              font-semibold
+                              text-emerald-400
+                              bg-emerald-500/10
+                              px-2
+                              py-0.5
+                              rounded-md
+                            "
+                          >
+                            <TrendingDown className="w-3 h-3" />
+                            Hemat{" "}
+                            {umkm.savingsPercent}%
+                          </span>
+
+                          <span
+                            className="
+                              inline-flex
+                              items-center
+                              gap-1
+                              text-[10px]
+                              font-semibold
+                              text-blue-400
+                              bg-blue-500/10
+                              px-2
+                              py-0.5
+                              rounded-md
+                            "
+                          >
+                            <Star className="w-3 h-3 fill-blue-400" />
+                            {umkm.rating}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Footer Stats */}
+
+          <div
+            className="
+              p-4
+              border-t
+              border-white/[0.06]
+              bg-white/[0.01]
+            "
+          >
+            <div
+              className="
+                flex
+                items-center
+                justify-between
+                text-[11px]
+                text-slate-500
+              "
+            >
+              <span>Total UMKM Hijau</span>
+
+              <span className="text-white font-bold">
+                {UMKM_DATA.length} Lokasi
+              </span>
+            </div>
+
+            <div
+              className="
+                w-full
+                h-1.5
+                bg-white/[0.04]
+                rounded-full
+                mt-2
+                overflow-hidden
+              "
+            >
+              <div
+                className="
+                  h-full
+                  bg-gradient-to-r
+                  from-amber-500
+                  to-slate-400
+                  rounded-full
+                  transition-all
+                  duration-500
+                "
+                style={{
+                  width: `${
+                    (goldCount /
+                      UMKM_DATA.length) *
+                    100
+                  }%`,
+                }}
+              />
+            </div>
+          </div>
+        </aside>
+
+        {/* ═══════════════════════════════════════
+            MAP
+            ═══════════════════════════════════════ */}
+
+        <div
+          className="
+            relative
+            z-10
+            flex-1
+            min-w-0
+            bg-slate-950/20
+            backdrop-blur-xl
+          "
+        >
+          <MapContainer
+            center={[-7.3258, 108.2202]}
+            zoom={13}
+            scrollWheelZoom={true}
+            className="w-full h-full"
+            zoomControl={false}
+          >
+            {/* Dark Map Tiles */}
+
+            <TileLayer
+              attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            />
+
+            {/* User Location */}
+
             <Marker
-              key={umkm.id}
-              position={[umkm.lat, umkm.lng]}
-              icon={umkm.tier === "gold" ? goldIcon : silverIcon}
-              eventHandlers={{
-                click: () => setSelectedId(umkm.id),
-              }}
+              position={[-7.3258, 108.2202]}
+              icon={userIcon}
             >
               <Popup>
-                <div className="overflow-hidden">
-                  {/* Image */}
-                  <div className="relative h-28">
-                    <img
-                      src={umkm.image}
-                      alt={umkm.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent" />
-                    <div
-                      className={`absolute top-2 right-2 px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                        umkm.tier === "gold"
-                          ? "bg-amber-500 text-white"
-                          : "bg-slate-400 text-white"
-                      }`}
-                    >
-                      {umkm.tier === "gold" ? "🥇 GOLD" : "🥈 SILVER"}
-                    </div>
+                <div className="p-3 text-center">
+                  <div
+                    className="
+                      w-8
+                      h-8
+                      rounded-full
+                      bg-emerald-500/20
+                      flex
+                      items-center
+                      justify-center
+                      mx-auto
+                      mb-2
+                    "
+                  >
+                    <MapPin className="w-4 h-4 text-emerald-400" />
                   </div>
 
-                  {/* Content */}
-                  <div className="p-3">
-                    <h4 className="text-white font-bold text-sm mb-1">
-                      {umkm.name}
-                    </h4>
-                    <p className="text-slate-400 text-[11px] mb-3 leading-relaxed">
-                      {umkm.address}
-                    </p>
+                  <p className="text-white font-semibold text-sm">
+                    Lokasi Kamu
+                  </p>
 
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
-                        <Zap className="w-3 h-3 text-emerald-400" />
-                        Hemat {umkm.savingsPercent}%
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
-                        <Star className="w-3 h-3 text-blue-400 fill-blue-400" />
-                        {umkm.rating} rating
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
-                        <Phone className="w-3 h-3 text-slate-400" />
-                        {umkm.phone}
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
-                        <Clock className="w-3 h-3 text-slate-400" />
-                        {umkm.openHours}
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => handleNavigate(umkm)}
-                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-bold flex items-center justify-center gap-2 hover:from-emerald-400 hover:to-teal-400 transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.98]"
-                    >
-                      <Navigation className="w-3.5 h-3.5" />
-                      Navigasi ke Sini
-                    </button>
-                  </div>
+                  <p className="text-slate-400 text-xs mt-1">
+                    Kab. Tasikmalaya
+                  </p>
                 </div>
               </Popup>
             </Marker>
-          ))}
 
-          {/* Fly to selected */}
-          {selectedUMKM && (
-            <FlyToLocation
-              lat={selectedUMKM.lat}
-              lng={selectedUMKM.lng}
-              trigger={flyTrigger}
-            />
-          )}
-        </MapContainer>
+            {/* UMKM Markers */}
 
-        {/* ─── Map Overlay Controls ─── */}
-        {/* Legend */}
-        <div className="absolute bottom-6 left-6 z-[400] bg-[#0f172a]/80 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 shadow-[0_20px_40px_rgba(15,23,42,0.45)]">
-          <p className="text-white text-xs font-bold mb-3">Legenda</p>
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-2.5">
-              <div className="w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-              <span className="text-slate-400 text-[11px]">Gold Tier</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <div className="w-3 h-3 rounded-full bg-slate-400 shadow-[0_0_8px_rgba(148,163,184,0.4)]" />
-              <span className="text-slate-400 text-[11px]">Silver Tier</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-              <span className="text-slate-400 text-[11px]">Lokasi Kamu</span>
+            {filteredUMKM.map((umkm) => (
+              <Marker
+                key={umkm.id}
+                position={[
+                  umkm.lat,
+                  umkm.lng,
+                ]}
+                icon={
+                  umkm.tier === "gold"
+                    ? goldIcon
+                    : silverIcon
+                }
+                eventHandlers={{
+                  click: () =>
+                    setSelectedId(umkm.id),
+                }}
+              >
+                <Popup>
+                  <div className="overflow-hidden">
+                    {/* Image */}
+
+                    <div className="relative h-28">
+                      <img
+                        src={umkm.image}
+                        alt={umkm.name}
+                        className="
+                          w-full
+                          h-full
+                          object-cover
+                        "
+                      />
+
+                      <div
+                        className="
+                          absolute
+                          inset-0
+                          bg-gradient-to-t
+                          from-[#0f172a]
+                          via-transparent
+                          to-transparent
+                        "
+                      />
+
+                      <div
+                        className={`absolute top-2 right-2 px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                          umkm.tier === "gold"
+                            ? "bg-amber-500 text-white"
+                            : "bg-slate-400 text-white"
+                        }`}
+                      >
+                        {umkm.tier === "gold"
+                          ? "🥇 GOLD"
+                          : "🥈 SILVER"}
+                      </div>
+                    </div>
+
+                    {/* Content */}
+
+                    <div className="p-3">
+                      <h4 className="text-white font-bold text-sm mb-1">
+                        {umkm.name}
+                      </h4>
+
+                      <p
+                        className="
+                          text-slate-400
+                          text-[11px]
+                          mb-3
+                          leading-relaxed
+                        "
+                      >
+                        {umkm.address}
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
+                          <Zap className="w-3 h-3 text-emerald-400" />
+                          Hemat{" "}
+                          {umkm.savingsPercent}%
+                        </div>
+
+                        <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
+                          <Star className="w-3 h-3 text-blue-400 fill-blue-400" />
+                          {umkm.rating} rating
+                        </div>
+
+                        <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
+                          <Phone className="w-3 h-3 text-slate-400" />
+                          {umkm.phone}
+                        </div>
+
+                        <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
+                          <Clock className="w-3 h-3 text-slate-400" />
+                          {umkm.openHours}
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() =>
+                          handleNavigate(umkm)
+                        }
+                        className="
+                          w-full
+                          py-2.5
+                          rounded-xl
+                          bg-gradient-to-r
+                          from-emerald-500
+                          to-teal-500
+                          text-white
+                          text-xs
+                          font-bold
+                          flex
+                          items-center
+                          justify-center
+                          gap-2
+                          hover:from-emerald-400
+                          hover:to-teal-400
+                          transition-all
+                          shadow-lg
+                          shadow-emerald-500/20
+                          active:scale-[0.98]
+                        "
+                      >
+                        <Navigation className="w-3.5 h-3.5" />
+                        Navigasi ke Sini
+                      </button>
+                    </div>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+
+            {/* Fly To Selected */}
+
+            {selectedUMKM && (
+              <FlyToLocation
+                lat={selectedUMKM.lat}
+                lng={selectedUMKM.lng}
+                trigger={flyTrigger}
+              />
+            )}
+          </MapContainer>
+
+          {/* ═══════════════════════════════════════
+              MAP LEGEND
+              ═══════════════════════════════════════ */}
+
+          <div
+            className="
+              absolute
+              bottom-6
+              left-6
+              z-[400]
+              bg-[#0f172a]/80
+              backdrop-blur-xl
+              border
+              border-white/[0.08]
+              rounded-2xl
+              p-4
+              shadow-[0_20px_40px_rgba(15,23,42,0.45)]
+            "
+          >
+            <p className="text-white text-xs font-bold mb-3">
+              Legenda
+            </p>
+
+            <div className="space-y-2.5">
+              {/* Gold */}
+
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="
+                    w-3
+                    h-3
+                    rounded-full
+                    bg-amber-500
+                    shadow-[0_0_8px_rgba(245,158,11,0.5)]
+                  "
+                />
+
+                <span className="text-slate-400 text-[11px]">
+                  Gold Tier
+                </span>
+              </div>
+
+              {/* Silver */}
+
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="
+                    w-3
+                    h-3
+                    rounded-full
+                    bg-slate-400
+                    shadow-[0_0_8px_rgba(148,163,184,0.4)]
+                  "
+                />
+
+                <span className="text-slate-400 text-[11px]">
+                  Silver Tier
+                </span>
+              </div>
+
+              {/* User */}
+
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="
+                    w-3
+                    h-3
+                    rounded-full
+                    bg-emerald-500
+                    shadow-[0_0_8px_rgba(16,185,129,0.5)]
+                  "
+                />
+
+                <span className="text-slate-400 text-[11px]">
+                  Lokasi Kamu
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </motion.main>
   );

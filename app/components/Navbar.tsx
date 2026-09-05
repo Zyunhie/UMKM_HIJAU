@@ -11,14 +11,24 @@ const LusionButton = ({ text }: { text: string }) => {
     <motion.button
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.98 }}
-      className="group relative flex items-center justify-center w-24 h-10 rounded-full bg-transparent border border-white/20 overflow-hidden transition-all duration-500 hover:bg-green-500 hover:border-green-500 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)]"
+      className="group relative flex items-center justify-center w-24 h-10 rounded-full bg-transparent border border-white/20 overflow-hidden transition-all duration-500 hover:bg-green-500 hover:border-green-500 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] cursor-pointer"
     >
       <div className="absolute left-2 opacity-0 -translate-x-5 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-10">
-        <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        <svg
+          className="w-4 h-4 text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2.5}
+            d="M14 5l7 7m0 0l-7 7m7-7H3"
+          />
         </svg>
       </div>
-      <span className="text-sm font-semibold text-neutral-200 group-hover:text-black group-hover:translate-x-3 group-hover:tracking-wide transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] relative z-10">
+      <span className="text-sm font-semibold text-neutral-200 group-hover:text-white group-hover:translate-x-3 group-hover:tracking-wide transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] relative z-10">
         {text}
       </span>
     </motion.button>
@@ -29,12 +39,11 @@ const RippleGearButton = () => {
   const [coords, setCoords] = useState({ x: -1, y: -1 });
   const [isHovering, setIsHovering] = useState(false);
 
-  // State Modal & Tema
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewTheme, setPreviewTheme] = useState<"dark" | "white">("dark");
+  const [isLightTheme, setIsLightTheme] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Pastikan render portal hanya di client side dan baca preferensi yang tersimpan
   useEffect(() => {
     setMounted(true);
     try {
@@ -42,42 +51,30 @@ const RippleGearButton = () => {
       if (saved === "white") {
         setPreviewTheme("white");
         document.body.classList.add("light-theme");
+        setIsLightTheme(true);
       } else {
         setPreviewTheme("dark");
         document.body.classList.remove("light-theme");
+        setIsLightTheme(false);
       }
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
   }, []);
-
-  // Live preview saat user pilih opsi sebelum disave
-  useEffect(() => {
-    if (!mounted) return;
-    if (previewTheme === "white") {
-      document.body.classList.add("light-theme");
-    } else {
-      document.body.classList.remove("light-theme");
-    }
-  }, [previewTheme, mounted]);
-
-  const handleMouseMove = (e: MouseEvent<HTMLButtonElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
 
   const handleSaveTheme = () => {
     setIsModalOpen(false);
+    if (previewTheme === "white") {
+      document.body.classList.add("light-theme");
+      setIsLightTheme(true);
+    } else {
+      document.body.classList.remove("light-theme");
+      setIsLightTheme(false);
+    }
     try {
       localStorage.setItem("site-theme", previewTheme);
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
   };
 
-  // Apply a short transition when saving theme so change feels smooth
   const handleSaveWithTransition = () => {
-    // add a helper class to enable 1s transitions
     document.body.classList.add("theme-transition");
     handleSaveTheme();
     setTimeout(() => {
@@ -85,13 +82,19 @@ const RippleGearButton = () => {
     }, 1000);
   };
 
-  const modalBgClass = previewTheme === "white"
-    ? "bg-white text-black border border-slate-200"
-    : "bg-[#111111] text-white border border-white/20";
+  const handleMouseMove = (e: MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  // === 🔥 PERBAIKAN: tambahkan prefix "!" di semua class warna ===
+  const modalBgClass =
+    previewTheme === "white"
+      ? "!bg-white !text-black !border-slate-200"
+      : "!bg-[#111111] !text-white !border-white/20";
 
   return (
     <>
-      {/* SVG FILTER UNTUK TURBULENT DISPLACE */}
       <svg className="hidden">
         <defs>
           <filter id="turbulent-displace">
@@ -112,19 +115,23 @@ const RippleGearButton = () => {
         </defs>
       </svg>
 
-      {/* Tombol Gear Bawaan */}
       <motion.button
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          setPreviewTheme(isLightTheme ? "white" : "dark");
+          setIsModalOpen(true);
+        }}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         onMouseMove={handleMouseMove}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.98 }}
-        className="group relative w-10 h-10 rounded-full border border-white/20 overflow-hidden flex items-center justify-center transition-all duration-300"
+        className="group relative w-10 h-10 rounded-full border border-white/20 overflow-hidden flex items-center justify-center transition-all duration-300 cursor-pointer"
       >
         <div className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white transition-colors duration-300"></div>
         <div
-          className="absolute bg-white rounded-full pointer-events-none transition-all duration-500 ease-out z-0"
+          className={`absolute rounded-full pointer-events-none transition-all duration-500 ease-out z-0 ${
+            isLightTheme ? "bg-black" : "bg-white"
+          }`}
           style={{
             left: coords.x,
             top: coords.y,
@@ -134,119 +141,163 @@ const RippleGearButton = () => {
           }}
         />
         <div className="relative z-10 group-hover:rotate-180 transition-transform duration-700 ease-in-out">
-          <svg className="w-5 h-5 text-neutral-300 group-hover:text-black transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <svg
+            className={`w-5 h-5 transition-colors duration-300 ${
+              isLightTheme
+                ? "text-neutral-800 group-hover:text-white"
+                : "text-neutral-300 group-hover:text-black"
+            }`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
           </svg>
         </div>
       </motion.button>
 
-      {/* PORTAL: MENGELUARKAN MODAL KE LEVEL BODY UTAMA */}
-      {mounted && createPortal(
-        <AnimatePresence>
-          {isModalOpen && (
-            <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4" style={{ perspective: "1200px" }}>
-              {/* OVERLAY */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className="fixed inset-0 bg-black/40 backdrop-blur-sm"
-              />
-
-              {/* MODAL */}
-              <motion.div
-                initial={{ 
-                  opacity: 0, 
-                  scale: 0.1, 
-                  x: "35vw", 
-                  y: "-40vh",
-                  rotateX: 140, 
-                  rotateY: 180, 
-                  rotateZ: 45,
-                  filter: "url(#turbulent-displace)"
-                }}
-                animate={{
-                  opacity: [0, 1, 1, 1],
-                  scale: [0.1, 0.6, 1.12, 1],
-                  x: ["35vw", "10vw", "-2vw", "0vw"],
-                  y: ["-40vh", "5vh", "-2vh", "0vh"],
-                  rotateX: [140, -45, 15, 0],
-                  rotateY: [180, 45, -15, 0],
-                  rotateZ: [45, -20, 5, 0],
-                  filter: [
-                    "url(#turbulent-displace)",
-                    "url(#turbulent-displace)",
-                    "blur(1px)",
-                    "none"
-                  ]
-                }}
-                transition={{
-                  duration: 0.85,
-                  times: [0, 0.45, 0.8, 1],
-                  ease: "easeOut"
-                }}
-                exit={{ 
-                  opacity: 0, 
-                  scale: 0.9, 
-                  y: 20, 
-                  transition: { duration: 0.25, ease: "easeOut" } 
-                }}
-                className={`relative z-10 w-full max-w-sm ${modalBgClass} rounded-2xl p-6 shadow-[0_20px_60px_rgba(2,6,23,0.6)] flex flex-col`}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {isModalOpen && (
+              <div
+                className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
+                style={{ perspective: "1200px" }}
               >
-                <h2 className={`text-2xl font-black mb-2 tracking-tight text-center ${previewTheme === 'white' ? 'text-slate-900' : 'text-white'}`}>Settings</h2>
-                <p className={`mb-6 text-sm text-center ${previewTheme === 'white' ? 'text-slate-600' : 'text-neutral-400'}`}>Choose your environment theme.</p>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="fixed inset-0 bg-black/40 backdrop-blur-sm"
+                />
 
-                {/* Theme Selection */}
-                <div className="grid grid-cols-2 gap-3 mb-8">
-                  <button
-                    onClick={() => setPreviewTheme("dark")}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
-                      previewTheme === "dark" 
-                        ? "border-green-500 bg-green-500/10 text-green-400" 
-                        : "border-white/10 bg-white/5 text-neutral-400"
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    scale: 0.1,
+                    x: "35vw",
+                    y: "-40vh",
+                    rotateX: 140,
+                    rotateY: 180,
+                    rotateZ: 45,
+                    filter: "url(#turbulent-displace)",
+                  }}
+                  animate={{
+                    opacity: [0, 1, 1, 1],
+                    scale: [0.1, 0.6, 1.12, 1],
+                    x: ["35vw", "10vw", "-2vw", "0vw"],
+                    y: ["-40vh", "5vh", "-2vh", "0vh"],
+                    rotateX: [140, -45, 15, 0],
+                    rotateY: [180, 45, -15, 0],
+                    rotateZ: [45, -20, 5, 0],
+                    filter: [
+                      "url(#turbulent-displace)",
+                      "url(#turbulent-displace)",
+                      "blur(1px)",
+                      "none",
+                    ],
+                  }}
+                  transition={{
+                    duration: 0.85,
+                    times: [0, 0.45, 0.8, 1],
+                    ease: "easeOut",
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.9,
+                    y: 20,
+                    transition: { duration: 0.25, ease: "easeOut" },
+                  }}
+                  className={`relative z-10 w-full max-w-sm ${modalBgClass} rounded-2xl p-6 shadow-[0_20px_60px_rgba(2,6,23,0.6)] flex flex-col`}
+                >
+                  {/* Judul & deskripsi – pakai !important */}
+                  <h2
+                    className={`text-2xl font-black mb-2 tracking-tight text-center ${
+                      previewTheme === "white"
+                        ? "!text-slate-900"
+                        : "!text-white"
                     }`}
                   >
-                    <div className="w-8 h-8 rounded-full bg-[#050505] border border-white/20"></div>
-                    <span className="text-sm font-bold">Dark</span>
-                  </button>
-
-                  <button
-                    onClick={() => setPreviewTheme("white")}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
-                      previewTheme === "white" 
-                        ? "border-green-500 bg-green-500/10 text-green-400" 
-                        : "border-white/10 bg-white/5 text-neutral-400"
+                    Settings
+                  </h2>
+                  <p
+                    className={`mb-6 text-sm text-center ${
+                      previewTheme === "white"
+                        ? "!text-slate-600"
+                        : "!text-neutral-400"
                     }`}
                   >
-                    <div className="w-8 h-8 rounded-full bg-white border border-neutral-300"></div>
-                    <span className="text-sm font-bold">White</span>
-                  </button>
-                </div>
+                    Choose your environment theme.
+                  </p>
 
-                {/* Action Buttons */}
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setIsModalOpen(false)}
-                    className={`flex-1 py-3 rounded-xl ${previewTheme === 'white' ? 'bg-slate-100 text-slate-900 hover:bg-slate-200' : 'bg-white/5 hover:bg-white/10 text-white'} font-semibold text-sm transition-all`}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleSaveWithTransition}
-                    className="flex-1 py-3 rounded-xl bg-green-500 hover:bg-green-400 text-black font-extrabold text-sm shadow-[0_0_15px_rgba(34,197,94,0.3)] transition-all"
-                  >
-                    Save Theme
-                  </button>
-                </div>
-              </motion.div>
+                  {/* Pilihan tema */}
+                  <div className="grid grid-cols-2 gap-3 mb-8">
+                    <button
+                      onClick={() => setPreviewTheme("dark")}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                        previewTheme === "dark"
+                          ? "!border-green-500 !bg-green-500/10 !text-green-400"
+                          : previewTheme === "white"
+                            ? "!bg-slate-100 !border-slate-200 !text-slate-600"
+                            : "!border-white/10 !bg-white/5 !text-neutral-400"
+                      }`}
+                    >
+                      <div className="w-8 h-8 rounded-full !bg-[#050505] !border !border-white/20"></div>
+                      <span className="text-sm font-bold">Dark</span>
+                    </button>
 
-            </div>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+                    <button
+                      onClick={() => setPreviewTheme("white")}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                        previewTheme === "white"
+                          ? "!border-green-500 !bg-green-500/10 !text-green-400"
+                          : "!border-white/10 !bg-white/5 !text-neutral-400"
+                      }`}
+                    >
+                      <div className="w-8 h-8 rounded-full !bg-white !border !border-neutral-300"></div>
+                      <span className="text-sm font-bold">White</span>
+                    </button>
+                  </div>
+
+                  {/* Tombol aksi */}
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setIsModalOpen(false)}
+                      className={`flex-1 py-3 rounded-xl ${
+                        previewTheme === "white"
+                          ? "!bg-slate-100 !text-slate-900 hover:!bg-slate-200"
+                          : "!bg-white/5 hover:!bg-white/10 !text-white"
+                      } font-semibold text-sm transition-all`}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSaveWithTransition}
+                      className={`flex-1 py-3 rounded-xl !bg-green-500 hover:!bg-green-400 ${
+                        previewTheme === "white" ? "!text-white" : "!text-black"
+                      } font-extrabold text-sm shadow-[0_0_15px_rgba(34,197,94,0.3)] transition-all`}
+                    >
+                      Save Theme
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>,
+          document.body,
+        )}
     </>
   );
 };
@@ -261,9 +312,26 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+const [isLight, setIsLight] = useState(false);
+
+useEffect(() => {
+  const checkTheme = () => {
+    setIsLight(document.body.classList.contains("light-theme"));
+  };
+  checkTheme();
+  const observer = new MutationObserver(checkTheme);
+  observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  return () => observer.disconnect();
+}, []);
 
   return (
-    <nav className="fixed top-8 inset-x-0 mx-auto w-[92%] max-w-7xl rounded-full bg-black/20 backdrop-blur-2xl border border-white/10 px-4 py-3 flex items-center justify-between z-50 shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]">
+<nav
+  className={`fixed top-8 inset-x-0 mx-auto w-[92%] max-w-7xl rounded-full px-4 py-3 flex items-center justify-between z-50 transition-all duration-500 ${
+    isLight
+      ? "bg-white/60 backdrop-blur-2xl border border-white/40 shadow-[0_8px_30px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)]"
+      : "bg-black/20 backdrop-blur-2xl border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]"
+  }`}
+>
       {/* Brand Logo */}
       <div className="flex-1 flex items-center justify-start pl-2">
         <div
@@ -288,7 +356,8 @@ export default function Navbar() {
           {NAV_MENU.map((item, index) => {
             const isActive = pathname === item.href;
             const isHovered = hoveredIndex === index;
-            const isSiblingHovered = hoveredIndex !== null && hoveredIndex !== index;
+            const isSiblingHovered =
+              hoveredIndex !== null && hoveredIndex !== index;
 
             return (
               <motion.li
@@ -306,15 +375,17 @@ export default function Navbar() {
                     isActive || isHovered
                       ? "w-32 text-green-400 font-bold scale-110 tracking-wide"
                       : isSiblingHovered
-                      ? "w-16 text-neutral-600 text-sm blur-[1px] scale-90"
-                      : "w-24 text-neutral-300 font-medium scale-100"
+                        ? "w-16 text-neutral-600 text-sm blur-[1px] scale-90"
+                        : "w-24 text-neutral-300 font-medium scale-100"
                   }
                 `}
                 whileHover={isActive ? {} : { scale: 1.04 }}
                 whileTap={isActive ? {} : { scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 380, damping: 26 }}
               >
-                <span className="relative z-10 pointer-events-none">{item.label}</span>
+                <span className="relative z-10 pointer-events-none">
+                  {item.label}
+                </span>
                 {(isHovered || isActive) && (
                   <div className="absolute inset-0 bg-green-500/10 rounded-full blur-md -z-10 animate-pulse"></div>
                 )}

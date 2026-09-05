@@ -6,8 +6,6 @@
   --foreground: #171717;
 }
 
-/* removed invalid @theme rule; keep using :root variables */
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -130,10 +128,107 @@ body.light-theme .auth-shell {
 
 /* Orb color variables so orbs adapt to theme */
 :root {
-  --orb-1: rgba(88, 28, 135, 0.22);
-  --orb-2: rgba(4, 120, 87, 0.18);
+  --orb-1: rgba(88, 28, 135, 0.36);
+  --orb-2: rgba(4, 120, 87, 0.28);
 }
 body.light-theme {
-  --orb-1: rgba(168, 85, 247, 0.12);
-  --orb-2: rgba(16,185,129,0.12);
+  --orb-1: rgba(168, 85, 247, 0.22);
+  --orb-2: rgba(16,185,129,0.18);
+}
+
+/* ============================================================
+   ABOUT PAGE - THEME VARIABLES (dark = default)
+   ============================================================ */
+.about-page {
+  --ab-bg: #050505;
+  --ab-text: #ffffff;
+  --ab-muted: #a3a3a3;
+  --ab-dim: #525252;              /* heading secondary / ikon idle */
+  --ab-feature: #d4d4d4;          /* teks fitur di kartu */
+  --ab-border: rgba(255,255,255,0.1);
+  --ab-border-strong: rgba(255,255,255,0.18);
+  --ab-card: rgba(255,255,255,0.05);
+  --ab-chip: rgba(5,5,5,0.6);     /* floating card di atas gambar */
+  --ab-icon-box: rgba(255,255,255,0.05);
+  --ab-track: #262626;            /* garis timeline */
+  --ab-track-dot: #525252;
+  --ab-dot: #262626;              /* titik sudut kartu badge */
+  --ab-watermark: rgba(255,255,255,0.03);
+  --ab-grid: rgba(255,255,255,0.03);
+  --ab-glare: rgba(255,255,255,0.15);
+  --orb-1: rgba(239,68,68,0.28);
+  --orb-2: rgba(20,184,166,0.20);
+  --orb-3: rgba(34,197,94,0.20);
+  transition: background-color 0.6s ease;
+}
+
+/* Light theme: off-white kehijauan, tetep ada vibe eco */
+/* Di dalam body.light-theme .about-page */
+body.light-theme .about-page {
+  --ab-bg: #f2f7f4;
+  --ab-text: #0f172a;
+  --ab-muted: #5b6b76;
+  --ab-dim: #b3c0c9;
+  --ab-feature: #475569;
+  --ab-border: rgba(15,23,42,0.1);
+  --ab-border-strong: rgba(15,23,42,0.18);
+  --ab-card: rgba(255,255,255,0.7);
+  --ab-chip: rgba(255,255,255,0.85);
+  --ab-icon-box: rgba(15,23,42,0.05);
+  --ab-track: rgba(15,23,42,0.12);
+  --ab-track-dot: #94a3b8;
+  --ab-dot: rgba(15,23,42,0.15);
+  --ab-watermark: rgba(15,23,42,0.05);
+  --ab-grid: rgba(15,23,42,0.045);
+  --ab-glare: rgba(16,185,129,0.12);
+  /* orbs lebih pekat */
+  --orb-1: rgba(254, 34, 34, 0.47);
+  --orb-2: rgba(17, 217, 194, 0.573);
+  --orb-3: rgba(114, 255, 166, 0.475);
+}
+
+/* Gradasi judul hero - dark & light */
+.hero-grad {
+  background-image: linear-gradient(to right, #4ade80, #6ee7b7, #14b8a6);
+}
+body.light-theme .hero-grad {
+  background-image: linear-gradient(to right, #059669, #10b981, #0d9488);
+}
+
+/* Gradasi judul GOLD di kartu badge (kuning di putih perlu digelapin) */
+.gold-title {
+  background-image: linear-gradient(to bottom right, #fef9c3, #facc15, #d97706);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+body.light-theme .gold-title {
+  background-image: linear-gradient(to bottom right, #fbbf24, #d97706, #92400e);
+}
+
+/* Background kartu badge GOLD */
+.about-gold-card {
+  background: linear-gradient(to bottom right, rgba(120,72,10,0.35), rgba(10,10,10,0.95) 40%, rgba(10,10,10,0.95));
+}
+body.light-theme .about-gold-card {
+  background: linear-gradient(to bottom right, rgba(254,243,199,0.9), rgba(255,255,255,0.96) 40%, rgba(255,255,255,0.96));
+  box-shadow: 0 24px 60px -24px rgba(180,120,10,0.35);
+}
+
+/* Background kartu badge SILVER */
+.about-silver-card {
+  background: linear-gradient(to bottom right, rgba(51,65,85,0.4), rgba(15,15,15,0.95) 40%, rgba(15,15,15,0.95));
+}
+body.light-theme .about-silver-card {
+  background: linear-gradient(to bottom right, rgba(226,232,240,0.85), rgba(255,255,255,0.96) 40%, rgba(255,255,255,0.96));
+  box-shadow: 0 24px 60px -24px rgba(100,116,139,0.35);
+}
+
+/* ============================================================
+   EXCEPTIONS - elemen yang sudah theme-aware via variabel,
+   jangan ditimpa rule brutal di atas
+   ============================================================ */
+body.light-theme main.about-page {
+  background-color: var(--ab-bg) !important;
+  backdrop-filter: none !important;
 }

@@ -113,7 +113,7 @@ const ICON_LOCK = (
         <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="1.7"
+            strokeWidth={1.7}
             d="M8 10V7a4 4 0 018 0v3"
         />
     </svg>
@@ -306,9 +306,9 @@ const FloatingInput = ({
                     w-9 h-9
                     rounded-xl
                     flex items-center justify-center
-                    text-neutral-500
-                    bg-white/[0.05]
-                    border border-white/[0.06]
+                    text-[var(--text-secondary)]
+                    bg-[var(--input-bg)]
+                    border border-[var(--input-border)]
                     group-focus-within:text-green-400
                     group-focus-within:bg-green-400/10
                     group-focus-within:border-green-400/20
@@ -329,16 +329,16 @@ const FloatingInput = ({
                 className="
                     w-full
                     h-[58px]
-                    bg-white/[0.035]
-                    border border-white/10
+                    bg-[var(--input-bg)]
+                    border border-[var(--input-border)]
                     rounded-2xl
                     pl-14 pr-12
-                    text-sm text-white
+                    text-sm text-[var(--text-primary)]
                     outline-none
                     backdrop-blur-sm
-                    hover:bg-white/[0.05]
+                    hover:bg-[var(--input-hover-bg)]
                     focus:border-green-400/80
-                    focus:bg-white/[0.07]
+                    focus:bg-[var(--input-focus-bg)]
                     focus:ring-2
                     focus:ring-green-400/15
                     transition-all duration-200
@@ -354,8 +354,8 @@ const FloatingInput = ({
                     transition-all duration-200
                     ${
                         isActive
-                            ? "-top-2.5 text-[11px] bg-[#050505] px-2 text-green-400 font-bold tracking-wider rounded-full border border-green-400/30"
-                            : "top-1/2 -translate-y-1/2 text-sm text-neutral-500"
+                            ? "-top-2.5 text-[11px] bg-[var(--label-active-bg)] px-2 text-green-400 font-bold tracking-wider rounded-full border border-green-400/30"
+                            : "top-1/2 -translate-y-1/2 text-sm text-[var(--text-secondary)]"
                     }
                 `}
             >
@@ -372,7 +372,7 @@ const FloatingInput = ({
                         right-0
                         pr-4
                         flex items-center
-                        text-neutral-500
+                        text-[var(--text-secondary)]
                         hover:text-green-400
                         transition-colors
                     "
@@ -535,12 +535,39 @@ export default function AuthPageVibrance() {
 
     const [quoteIdx, setQuoteIdx] = useState(0);
 
+    const [theme, setTheme] =
+        useState<"dark" | "light">("dark");
+
     const [formState, setFormState] = useState({
         username: "",
         email: "",
         password: "",
         remember: false,
     });
+
+    // Inisialisasi tema dari localStorage / body class
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("site-theme");
+        if (savedTheme === "white") {
+            setTheme("light");
+            document.body.classList.add("light-theme");
+        } else {
+            setTheme("dark");
+            document.body.classList.remove("light-theme");
+        }
+    }, []);
+
+    const toggleTheme = () => {
+        const newTheme = theme === "dark" ? "light" : "dark";
+        setTheme(newTheme);
+        if (newTheme === "light") {
+            document.body.classList.add("light-theme");
+            localStorage.setItem("site-theme", "white");
+        } else {
+            document.body.classList.remove("light-theme");
+            localStorage.setItem("site-theme", "dark");
+        }
+    };
 
     /* ============================================================================
        PARALLAX
@@ -673,15 +700,50 @@ export default function AuthPageVibrance() {
         ? "50%"
         : "0%";
 
+    /* ============================================================================
+       THEME CSS VARIABLES
+       ============================================================================ */
+    const themeVars = {
+        dark: {
+            "--bg-primary": "#020402",
+            "--bg-panel": "#050505",
+            "--text-primary": "#ffffff",
+            "--text-secondary": "#a3a3a3",
+            "--border": "rgba(255,255,255,0.1)",
+            "--input-bg": "rgba(255,255,255,0.035)",
+            "--input-border": "rgba(255,255,255,0.1)",
+            "--input-hover-bg": "rgba(255,255,255,0.05)",
+            "--input-focus-bg": "rgba(255,255,255,0.07)",
+            "--label-active-bg": "#050505",
+            "--wave-color": "#050505",
+            "--green-text": "#4ade80",
+        },
+        light: {
+            "--bg-primary": "#f0fdf4",
+            "--bg-panel": "#ffffff",
+            "--text-primary": "#111827",
+            "--text-secondary": "#4b5563",
+            "--border": "rgba(0,0,0,0.1)",
+            "--input-bg": "rgba(0,0,0,0.03)",
+            "--input-border": "rgba(0,0,0,0.15)",
+            "--input-hover-bg": "rgba(0,0,0,0.05)",
+            "--input-focus-bg": "rgba(0,0,0,0.07)",
+            "--label-active-bg": "#ffffff",
+            "--wave-color": "#ffffff",
+            "--green-text": "#059669",
+        },
+    };
+
     return (
         <main
+            style={themeVars[theme] as React.CSSProperties}
             className="
                 relative
                 w-screen
                 h-screen
                 overflow-hidden
-                bg-[#020402]
-                text-white
+                bg-[var(--bg-primary)]
+                text-[var(--text-primary)]
                 font-sans
             "
             onMouseMove={(e) => {
@@ -713,11 +775,11 @@ export default function AuthPageVibrance() {
             py-2.5
             rounded-full
             border
-            border-white/10
+            border-[var(--border)]
             bg-black/20
             backdrop-blur-md
-            text-white/70
-            hover:text-white
+            text-[var(--text-secondary)]
+            hover:text-[var(--text-primary)]
             hover:border-green-400/30
             hover:bg-green-400/10
             transition-all
@@ -742,6 +804,27 @@ export default function AuthPageVibrance() {
         </svg>
 
         Back to Home
+    </motion.button>
+</div>
+
+{/* THEME TOGGLE */}
+<div className="absolute top-6 right-6 z-30">
+    <motion.button
+        onClick={toggleTheme}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="
+            p-2.5 rounded-full
+            border border-[var(--border)]
+            bg-black/20 backdrop-blur-md
+            text-[var(--text-secondary)]
+            hover:text-[var(--text-primary)]
+            hover:border-green-400/30
+            transition-all
+            flex items-center justify-center
+        "
+    >
+        {theme === 'dark' ? '☀️' : '🌙'}
     </motion.button>
 </div>
             
@@ -931,9 +1014,10 @@ export default function AuthPageVibrance() {
                                         font-black
                                         tracking-tighter
                                         leading-[1.05]
-                                        text-white
+                                        text-[var(--text-primary)]
                                         drop-shadow-[0_4px_30px_rgba(0,0,0,0.5)]
                                         whitespace-pre-line
+                                        !text-white
                                     "
                                 >
                                     {isSignup
@@ -999,7 +1083,7 @@ export default function AuthPageVibrance() {
                                         rounded-full
                                         border
                                         border-green-400/50
-                                        text-white
+                                        text-[var(--text-primary)]
                                         font-black
                                         text-sm
                                         uppercase
@@ -1015,6 +1099,7 @@ export default function AuthPageVibrance() {
                                         items-center
                                         gap-3
                                         group
+                                        !text-white
                                     "
                                 >
                                     {isSignup
@@ -1061,7 +1146,7 @@ export default function AuthPageVibrance() {
                         top-0
                         h-full
                         w-[50vw]
-                        bg-[#050505]
+                        bg-[var(--bg-panel)]
                         z-20
                     "
                 >
@@ -1086,7 +1171,7 @@ export default function AuthPageVibrance() {
                             preserveAspectRatio="none"
                         >
                             <motion.path
-                                fill="#050505"
+                                fill="var(--wave-color)"
                                 animate={{
                                     d: [
                                         WAVE_A,
@@ -1163,7 +1248,7 @@ export default function AuthPageVibrance() {
                                                 text-4xl
                                                 font-black
                                                 tracking-tight
-                                                text-white
+                                                text-[var(--text-primary)]
                                                 flex
                                                 items-center
                                                 gap-3
@@ -1185,7 +1270,7 @@ export default function AuthPageVibrance() {
                                             />
                                         </h2>
 
-                                        <p className="text-neutral-400 text-sm mt-2 font-medium">
+                                        <p className="text-[var(--text-secondary)] text-sm mt-2 font-medium">
                                             {isSignup
                                                 ? "Start your eco-journey and make an impact."
                                                 : "Sign in to continue your green mission."}
@@ -1287,7 +1372,7 @@ export default function AuthPageVibrance() {
                                                             role ===
                                                             "user"
                                                                 ? "border-green-400/80 bg-green-500/10 text-green-300 shadow-[0_0_25px_rgba(34,197,94,0.12)]"
-                                                                : "border-white/10 bg-white/[0.02] text-neutral-400 hover:border-white/20 hover:bg-white/[0.04] hover:text-white"
+                                                                : "border-[var(--border)] bg-[var(--input-bg)] text-[var(--text-secondary)] hover:border-[var(--border)] hover:bg-[var(--input-hover-bg)] hover:text-[var(--text-primary)]"
                                                         }
                                                     `}
                                                 >
@@ -1304,7 +1389,7 @@ export default function AuthPageVibrance() {
                                                                 role ===
                                                                 "user"
                                                                     ? "bg-green-400/15 text-green-400"
-                                                                    : "bg-white/[0.05] text-neutral-500 group-hover:text-white"
+                                                                    : "bg-[var(--input-bg)] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]"
                                                             }
                                                         `}
                                                     >
@@ -1358,7 +1443,7 @@ export default function AuthPageVibrance() {
                                                             role ===
                                                             "umkm"
                                                                 ? "border-green-400/80 bg-green-500/10 text-green-300 shadow-[0_0_25px_rgba(34,197,94,0.12)]"
-                                                                : "border-white/10 bg-white/[0.02] text-neutral-400 hover:border-white/20 hover:bg-white/[0.04] hover:text-white"
+                                                                : "border-[var(--border)] bg-[var(--input-bg)] text-[var(--text-secondary)] hover:border-[var(--border)] hover:bg-[var(--input-hover-bg)] hover:text-[var(--text-primary)]"
                                                         }
                                                     `}
                                                 >
@@ -1375,7 +1460,7 @@ export default function AuthPageVibrance() {
                                                                 role ===
                                                                 "umkm"
                                                                     ? "bg-green-400/15 text-green-400"
-                                                                    : "bg-white/[0.05] text-neutral-500 group-hover:text-white"
+                                                                    : "bg-[var(--input-bg)] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]"
                                                             }
                                                         `}
                                                     >
@@ -1417,8 +1502,8 @@ export default function AuthPageVibrance() {
                                                         mt-0.5
                                                         rounded-md
                                                         border
-                                                        border-white/20
-                                                        bg-white/5
+                                                        border-[var(--border)]
+                                                        bg-[var(--input-bg)]
                                                         group-hover:border-green-400/50
                                                         transition-colors
                                                     "
@@ -1462,7 +1547,7 @@ export default function AuthPageVibrance() {
                                                     )}
                                                 </div>
 
-                                                <p className="text-xs text-neutral-400 leading-relaxed">
+                                                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                                                     I agree to the{" "}
                                                     <span className="text-green-400 hover:underline">
                                                         Terms of
@@ -1580,8 +1665,8 @@ export default function AuthPageVibrance() {
                                                             h-4
                                                             rounded
                                                             border
-                                                            border-white/20
-                                                            bg-white/5
+                                                            border-[var(--border)]
+                                                            bg-[var(--input-bg)]
                                                             group-hover:border-green-400/50
                                                             transition-colors
                                                         "
@@ -1619,7 +1704,7 @@ export default function AuthPageVibrance() {
                                                         )}
                                                     </div>
 
-                                                    <span className="text-xs text-neutral-400 group-hover:text-white transition-colors">
+                                                    <span className="text-xs text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
                                                         Remember
                                                         me
                                                     </span>

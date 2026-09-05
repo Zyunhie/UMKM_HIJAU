@@ -227,6 +227,7 @@ const MagneticButton = ({
     className,
     onClick,
     type = "button",
+    disabled = false,
 }: any) => {
     const x = useMotionValue(0);
     const y = useMotionValue(0);
@@ -244,6 +245,7 @@ const MagneticButton = ({
     const handleMouseMove = (
         e: React.MouseEvent<HTMLButtonElement>
     ) => {
+        if (disabled) return;
         const rect = e.currentTarget.getBoundingClientRect();
 
         const centerX = rect.left + rect.width / 2;
@@ -265,9 +267,10 @@ const MagneticButton = ({
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{ x: springX, y: springY }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: disabled ? 1 : 1.02 }}
+            whileTap={{ scale: disabled ? 1 : 0.97 }}
             className={className}
+            disabled={disabled}
         >
             {children}
         </motion.button>
@@ -545,6 +548,10 @@ export default function AuthPageVibrance() {
         remember: false,
     });
 
+    // --- STATE BARU UNTUK API ---
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
     // Inisialisasi tema dari localStorage / body class
     useEffect(() => {
         const savedTheme = localStorage.getItem("site-theme");
@@ -732,6 +739,109 @@ export default function AuthPageVibrance() {
             "--wave-color": "#ffffff",
             "--green-text": "#059669",
         },
+    };
+
+    // ==================== API HANDLERS ====================
+    const handleSignup = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setErrorMessage(null);
+
+        const payload = {
+            username: formState.username,
+            email: formState.email,
+            password: formState.password,
+            role: role,
+        };
+
+        try {
+            const res = await fetch('https://umkm-hijau.my.id/api/umkm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                // Coba ambil pesan error dari response Laravel
+                let message = data.message || data.error || 'Terjadi kesalahan';
+                if (data.errors) {
+                    // Ambil pesan pertama dari object errors
+                    const firstKey = Object.keys(data.errors)[0];
+                    if (firstKey) {
+                        message = data.errors[firstKey][0];
+                    }
+                }
+                setErrorMessage(message);
+                return;
+            }
+
+            // Sukses register
+            console.log('Register sukses:', data);
+            // Simpan token jika ada
+            // localStorage.setItem('token', data.token);
+            // router.push('/dashboard');
+            // Untuk sementara, tampilkan pesan sukses
+            setErrorMessage(null); // clear error
+            // Bisa tambahkan notifikasi sukses atau redirect
+
+        } catch (err) {
+            setErrorMessage('Koneksi gagal. Periksa jaringan Anda.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setErrorMessage(null);
+
+        const payload = {
+            identifier: formState.username, // email/username
+            password: formState.password,
+        };
+
+        try {
+            const res = await fetch('https://umkm-hijau.my.id/api/umkm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                let message = data.message || data.error || 'Login gagal';
+                if (data.errors) {
+                    const firstKey = Object.keys(data.errors)[0];
+                    if (firstKey) {
+                        message = data.errors[firstKey][0];
+                    }
+                }
+                setErrorMessage(message);
+                return;
+            }
+
+            // Sukses login
+            console.log('Login sukses:', data);
+            // Simpan token
+            // localStorage.setItem('token', data.token);
+            // router.push('/dashboard');
+            setErrorMessage(null);
+
+        } catch (err) {
+            setErrorMessage('Koneksi gagal. Periksa jaringan Anda.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -1277,6 +1387,13 @@ export default function AuthPageVibrance() {
                                         </p>
                                     </div>
 
+                                    {/* Pesan Error */}
+                                    {errorMessage && (
+                                        <div className="mb-4 text-red-400 text-sm font-medium bg-red-500/10 border border-red-400/20 rounded-xl p-3">
+                                            {errorMessage}
+                                        </div>
+                                    )}
+
                                     {/* ==================================================
                                         SIGN UP
                                     ================================================== */}
@@ -1288,14 +1405,12 @@ export default function AuthPageVibrance() {
                                                 flex-col
                                                 gap-4
                                             "
-                                            onSubmit={(e) =>
-                                                e.preventDefault()
-                                            }
+                                            onSubmit={handleSignup}
                                         >
                                             {/* FULL NAME */}
                                             <FloatingInput
                                                 type="text"
-                                                label="Full Name"
+                                                label="Username"
                                                 icon={ICON_USER}
                                                 value={
                                                     formState.username
@@ -1565,6 +1680,7 @@ export default function AuthPageVibrance() {
                                             {/* SUBMIT */}
                                             <MagneticButton
                                                 type="submit"
+                                                disabled={isLoading}
                                                 className="
                                                     mt-2
                                                     w-full
@@ -1585,26 +1701,30 @@ export default function AuthPageVibrance() {
                                                     relative
                                                     overflow-hidden
                                                     group
+                                                    disabled:opacity-70
+                                                    disabled:cursor-not-allowed
                                                 "
                                             >
                                                 <span className="relative z-10 flex justify-center items-center gap-2">
-                                                    Create Account
+                                                    {isLoading ? 'Memproses...' : 'Create Account'}
 
-                                                    <svg
-                                                        className="w-4 h-4"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={
-                                                                2.5
-                                                            }
-                                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                                        />
-                                                    </svg>
+                                                    {!isLoading && (
+                                                        <svg
+                                                            className="w-4 h-4"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={
+                                                                    2.5
+                                                                }
+                                                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                                            />
+                                                        </svg>
+                                                    )}
                                                 </span>
                                             </MagneticButton>
                                         </form>
@@ -1619,9 +1739,7 @@ export default function AuthPageVibrance() {
                                                 flex-col
                                                 gap-5
                                             "
-                                            onSubmit={(e) =>
-                                                e.preventDefault()
-                                            }
+                                            onSubmit={handleLogin}
                                         >
                                             <FloatingInput
                                                 type="text"
@@ -1726,6 +1844,7 @@ export default function AuthPageVibrance() {
 
                                             <MagneticButton
                                                 type="submit"
+                                                disabled={isLoading}
                                                 className="
                                                     mt-2
                                                     w-full
@@ -1746,27 +1865,30 @@ export default function AuthPageVibrance() {
                                                     relative
                                                     overflow-hidden
                                                     group
+                                                    disabled:opacity-70
+                                                    disabled:cursor-not-allowed
                                                 "
                                             >
                                                 <span className="relative z-10 flex justify-center items-center gap-2">
-                                                    Sign In
-                                                    Securely
+                                                    {isLoading ? 'Memproses...' : 'Sign In Securely'}
 
-                                                    <svg
-                                                        className="w-4 h-4"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={
-                                                                2.5
-                                                            }
-                                                            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                                                        />
-                                                    </svg>
+                                                    {!isLoading && (
+                                                        <svg
+                                                            className="w-4 h-4"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={
+                                                                    2.5
+                                                                }
+                                                                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                                                            />
+                                                        </svg>
+                                                    )}
                                                 </span>
                                             </MagneticButton>
                                         </form>

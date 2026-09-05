@@ -124,7 +124,7 @@ export default function UserDashboardLayout({
         {/* Isi halaman */}
         <main
           className={`flex-1 relative ${
-            pathname?.startsWith("/user/map") ? "p-0 overflow-hidden" : "p-8"
+            pathname?.startsWith("/user/map") || pathname?.startsWith('/user/daftar-umkm') ? "p-0 overflow-hidden" : "p-8"
           }`}
         >
           {children}

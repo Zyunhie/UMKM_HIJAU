@@ -1,13 +1,189 @@
-# ECO-UMKM ### Ekosistem Bisnis Nol Karbon & Revolusi Hijau UMKM Indonesia [](#) [](#) [](LICENSE) **Submission for ITECHNO CUP 2026 - Web Development** **By Tim Sinergi**
---- ## 📋 Daftar Isi - [Tentang Proyek](#-tentang-proyek) - [Fitur Unggulan](#-fitur-unggulan) - [Demo & Screenshot](#-demo--screenshot) - [Teknologi](#-teknologi) - [Arsitektur Sistem](#-arsitektur-sistem) - [Instalasi & Setup](#-instalasi--setup) - [Penggunaan](#-penggunaan) - [API Documentation](#-api-documentation) - [Testing](#-testing) - [Tim Developer](#-tim-developer) - [Lisensi](#-lisensi) --- ## 👥 Tim Developer | Nama | Peran | Instansi / Institusi | GitHub | |------|-------|----------------------|--------| | **David Leonardo** | Project Lead & Full Stack Developer | SMKN 2 Tasikmalaya | [@davidleonardo](#) | | **[Nama Anggota 2]** | UI/UX Designer & Frontend | SMKN 2 Tasikmalaya | [@anggota2](#) | | **[Nama Anggota 3]** | Backend & Database Admin | SMKN 2 Tasikmalaya | [@anggota3](#) | --- ## 🎯 Tentang Proyek ### Latar Belakang Sektor Usaha Mikro, Kecil, dan Menengah (UMKM) adalah tulang punggung perekonomian Indonesia, berkontribusi terhadap lebih dari 60% PDB nasional. Namun, di balik pertumbuhan ekonomi tersebut, sektor industri skala kecil dan menengah masih menyumbang jejak karbon yang masif akibat penggunaan energi yang tidak efisien, pengelolaan limbah yang minim standar ekologi, dan kurangnya akses terhadap teknologi ramah lingkungan. Berdasarkan data agregat, transisi menuju energi hijau di tingkat akar rumput terhambat oleh tiga faktor utama: **kurangnya edukasi definitif**, **biaya infrastruktur hijau yang mahal**, dan **ketiadaan ekosistem yang saling mendukung**. Jika UMKM tidak dilibatkan dalam transisi energi, target emisi *Net Zero* Indonesia pada 2060 akan sangat sulit dicapai. ### Solusi yang Ditawarkan **Eco-UMKM** hadir sebagai platform revolusioner yang menjembatani transformasi ekonomi akar rumput dengan keberlanjutan lingkungan. Kami tidak hanya menyediakan *dashboard* pemantauan energi, tetapi membangun sebuah pergerakan holistik. Aplikasi ini mengintegrasikan edukasi efisiensi energi, pelacakan emisi karbon bulanan, sistem pemetaan (Maps) interaktif untuk bisnis ramah lingkungan, dan program gamifikasi *Reward Tier* (Silver & Gold Badges) yang menghubungkan UMKM berprestasi dengan akses investor hijau dan subsidi infrastruktur (seperti panel surya mini). ### Tujuan Proyek - 🎯 **Tujuan Utama**: Memproyeksikan 100% UMKM Indonesia untuk melek energi hijau sebelum akhir dekade ini melalui sistem yang terukur, transparan, dan menguntungkan secara bisnis. - 📊 **Target Pengguna**: Pemilik UMKM di seluruh Indonesia, Konsumen yang mencari produk/jasa ramah lingkungan, serta Investor Hijau yang mencari *sustainable business* untuk didanai. - 💡 **Value Proposition**: Menggabungkan *Micro-UI/UX* kelas dunia (WebGL, Framer Motion 3D) dengan utilitas nyata. Kami membuat proses "menjadi ramah lingkungan" bukan lagi sebuah beban biaya operasional, melainkan sebuah aset marketing, *pride*, dan pintu masuk investasi. --- ## ✨ Fitur Unggulan ### Fitur Utama | Fitur | Deskripsi | Keunggulan | |----------|--------------|---------------| | **Interactive Eco-Maps** | Peta dinamis berbasis koordinat yang memetakan seluruh UMKM berlabel hijau di sekitar pengguna. | Menggunakan logika *clustering* rumit untuk merender ribuan titik secara *real-time* tanpa mengorbankan FPS. | | **Tiered Validation Badges** | Sistem gamifikasi verifikasi lingkungan (Silver dan Gold). UMKM dievaluasi berdasarkan penghematan energi dan tata kelola sirkular. | Desain sertifikat digital 3D *Glassmorphism* & *Gyro-tracking* yang memberikan rasa eksklusivitas tingkat tinggi. | | **Real-time Carbon Dashboard** | Panel analitik interaktif yang memvisualisasikan konsumsi listrik bulanan (kWh) dengan kurva SVG dinamis. | Render kurva mulus dengan *hover point detection* presisi menggunakan transformasi matriks CTM. | | **Green Investor Portal** | Akses eksklusif (khusus tier Gold) yang mempertemukan UMKM dengan program subsidi panel surya dan pendanaan ekologis. | Mendorong UMKM untuk berlomba menurunkan emisi demi mendapatkan *badge* Gold. | ### Fitur Tambahan - **Edukasi Definitif (Modul Hijau)** - Modul interaktif *bite-sized* untuk mendemokratisasi ilmu efisiensi energi. - **Micro-UI & Immersive Animations** - Menggunakan teknik komputasi posisi kursor untuk efek *spotlight glare*, 50ms *blur transitions*, dan 3D *parallax*. - **Role-Based Access Control (RBAC)** - Pemisahan *dashboard* yang aman antara UMKM, Konsumen, dan Investor. - **Automated CSR Reporting** - Generator laporan otomatis berbasis PDF untuk metrik keberlanjutan UMKM. --- ## 📸 Demo & Screenshot ### Live Demo 🔗 **Kunjungi Website Eco-UMKM** ### Screenshot Aplikasi
-https://via.placeholder.com/800x400/050505/22c55e?text=Homepage+-+Immersive+3D+Gyro+Hero" alt="Homepage" width="800"/>
-Homepage - Tampilan utama dengan efek 3D Gyro & Instant Blur Lusion-style
+<div align="center">
+  
+  # 🛡️ YOUTH-GUARD (INTEGRATED YOUTH CONFLICT & GANG ACTIVITY DETERRENT SYSTEM)
+  ### Platform Digital Pelaporan Anonim, Pemetaan Zona Merah, dan Mitigasi Dini Kenakalan Remaja (Perkelahian & Gerombolan Bermotor)
+  <br>
 
-https://via.placeholder.com/800x400/050505/eab308?text=Premium+Tier+Badges+-+Interactive+Cards" alt="Badges" width="800"/>
-Reward System - Premium 3D Tilt Cards dengan Dynamic Glare untuk tier Silver & Gold
+  [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-success?style=for-the-badge)](https://youth-guard.vercel.app)
+  [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/davidleonardo/youth-guard)
+  [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+  <br>
 
-https://via.placeholder.com/800x400/050505/3b82f6?text=Carbon+Dashboard+-+SVG+Data+Visualization" alt="Dashboard" width="800"/>
-Carbon Dashboard - Pemantauan metrik kWh bulanan dengan kurva SVG presisi
+  **Submission for ITECHNO CUP 2026 - Web Development Category**
+  <br>
+  **Official Project Documentation v2.4.0**
+  <br>
+  
+  **By Tim Developer (SMKN 2 Tasikmalaya)**
+  
+</div>
 
---- ## 🛠️ Teknologi ### Tech Stack #### Frontend ``` Framework : Next.js 14 (App Router, Server Components) UI Library : Tailwind CSS, Lucide React Animations : Framer Motion (useMotionValue, useSpring, 3D Transforms) State Mgmt : Zustand (Global State untuk Maps & User Auth) Validation : Zod & React Hook Form ``` #### Backend ``` Runtime : Node.js Framework : Next.js API Routes (Serverless) / Express.js Database : PostgreSQL (Supabase / Neon) ORM : Prisma Auth : NextAuth.js (Session JWT & OAuth) ``` #### DevOps & Tools ``` Deployment : Vercel (Frontend & Edge Functions) CI/CD : GitHub Actions Testing : Jest & React Testing Library Maps Engine : Mapbox GL JS / Google Maps API (Custom Styled) ``` ### Alasan Pemilihan Teknologi | Teknologi | Alasan Pemilihan | |-----------|------------------| | **Next.js & Server Components** | Memberikan performa SEO maksimal untuk profil UMKM, sekaligus menjaga keamanan data metrik energi di sisi server. | | **Framer Motion** | Penting untuk *user experience*. Kami membutuhkan komputasi matriks 3D, kalkulasi *spring physics*, dan pelacakan koordinat *mouse* yang tidak bisa ditangani CSS biasa untuk menghadirkan UI sekelas awwwards. | | **Prisma & PostgreSQL** | Relasi data yang kompleks (User -> UMKM -> Sertifikasi -> Data Emisi Bulanan -> Koordinat Maps) membutuhkan database relasional dengan ORM yang menjamin *Type-Safety* secara *end-to-end*. | ### Dependencies Utama ```json { "dependencies": { "next": "^14.1.0", "react": "^18.2.0", "framer-motion": "^11.0.0", "tailwindcss": "^3.4.1", "lucide-react": "^0.344.0", "@prisma/client": "^5.10.0", "zod": "^3.22.4" } } ``` --- ## 🏗️ Arsitektur Sistem ### Database Schema (Simplified ERD) ```text [ User ] 1 ------ 1 [ UMKM Profile ] | |-- 1 [ Map Coordinates ] | |-- 1 [ Verification Badge (Silver/Gold) ] | +-- * [ Monthly Energy Log (kWh, CO2) ] ``` ### Folder Structure ``` project-root/ ├── src/ │ ├── app/ # Next.js App Router (Pages, Layouts, API) │ │ ├── (auth)/ # Routing untuk autentikasi │ │ ├── (dashboard)/ # Routing privat dashboard UMKM │ │ ├── about/ # Landing page Visi Misi & Badges │ │ └── api/ # Backend API Routes │ ├── components/ # Reusable UI Components │ │ ├── 3d/ # Komponen kompleks (LusionImage, PremiumCard) │ │ ├── charts/ # SVG Kurva & Grafik energi │ │ └── ui/ # Atomic design (Buttons, Inputs) │ ├── lib/ # Konfigurasi Prisma, Helper functions │ └── types/ # Deklarasi TypeScript Interface ├── prisma/ # Schema Database & Migrations └── public/ # Static assets (Images, SVGs, Fonts) ``` --- ## ⚙️ Instalasi & Setup ### Prerequisites Pastikan Anda telah menginstall: - **Node.js** (v18.17.0 atau lebih tinggi) - **npm** / **yarn** / **pnpm** - **PostgreSQL** lokal atau *cloud* (Supabase/Neon) - **Git** ### Langkah Instalasi #### 1️⃣ Clone Repository ```bash git clone https://github.com/davidleonardo/eco-umkm-itechno2026.git cd eco-umkm-itechno2026 ``` #### 2️⃣ Install Dependencies ```bash npm install ``` #### 3️⃣ Setup Environment Variables Buat file `.env` di root directory berdasarkan `.env.example`: ```env # Database Prisma DATABASE_URL="postgresql://user:password@localhost:5432/ecoumkm?schema=public" # Authentication NextAuth NEXTAUTH_SECRET="super_secret_key_generate_via_openssl" NEXTAUTH_URL="http://localhost:3000" # Maps API NEXT_PUBLIC_MAPBOX_TOKEN="pk.your_mapbox_token_here" ``` #### 4️⃣ Setup Database ```bash # Generate Prisma Client npx prisma generate # Jalankan migrasi database untuk membuat tabel npx prisma db push # Seed data awal (Dummy UMKM & Data Chart) npm run db:seed ``` #### 5️⃣ Run Development Server ```bash npm run dev ``` Aplikasi akan berjalan di `http://localhost:3000`. Halaman presentasi utama dapat diakses di `/about`. --- ## 🚀 Penggunaan ### Menjalankan Aplikasi ```bash # Development mode npm run dev # Production build test npm run build npm run start ``` ### User Guide #### Untuk UMKM 1. **Registrasi**: Buat akun dan isi detail profil bisnis, termasuk lokasi untuk *Maps*. 2. **Dashboard Energi**: Masukkan data tagihan listrik/penggunaan bahan bakar di menu *Tracker*. 3. **Klaim Badge**: Jika rata-rata emisi berada di bawah ambang batas selama 3 bulan, tombol "Klaim Silver/Gold" akan aktif. Verifikasi akan dilakukan melalui sistem. #### Untuk Konsumen/Pengunjung 1. **Eksplorasi Peta**: Buka halaman *Eco-Maps* untuk melihat titik UMKM hijau di sekitar lokasi Anda. 2. **Validasi**: Hover pada profil UMKM untuk melihat sertifikasi 3D (Silver/Gold) yang membuktikan komitmen lingkungan mereka. --- ## 📚 API Documentation ### Base URL ```text Development: http://localhost:3000/api Production: https://eco-umkm.vercel.app/api ``` ### Endpoints Utama #### Data Metrik UMKM ```http GET /api/umkm # Fetch list UMKM (Untuk render Maps) GET /api/umkm/:id/metrics # Fetch data kWh bulanan untuk Chart POST /api/umkm/:id/metrics # Update data penggunaan energi bulanan ``` #### Verifikasi & Gamifikasi ```http POST /api/badges/claim # Request validasi sistem untuk naik Tier GET /api/badges/status/:id # Cek progress UMKM menuju tier selanjutnya ``` ### Example Request (Fetch Data Chart Bulanan) ```javascript const fetchEnergyMetrics = async (umkmId) => { const response = await fetch(`/api/umkm/${umkmId}/metrics`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` } }); const data = await response.json(); // Mengembalikan array monthlyData untuk di-render di SVG Chart return data; }; ``` --- ## 🧪 Testing Kami memastikan reliabilitas platform bisnis ini dengan pengujian yang ketat. ### Running Tests ```bash # Unit tests (Jest) npm run test # Component Integration Tests (RTL) npm run test:integration ``` ### Test Coverage ```text Statements : 92.4% Branches : 88.6% Functions : 95.1% Lines : 94.0% ``` Fokus pengujian utama berada pada **Matematika Kalkulasi Emisi (Backend)** dan **Interaksi State Maps (Frontend)**. --- ## 📄 Lisensi Proyek ini dilisensikan di bawah [MIT License](LICENSE) - lihat file LICENSE untuk detail lebih lanjut. Seluruh aset desain, kurva SVG kustom, dan animasi matriks 3D merupakan hak kekayaan intelektual tim pengembang untuk ITECHNO CUP 2026. ---
-**Made with ❤️ by Tim Sinergi for ITECHNO CUP 2026**
+---
+<br>
+
+## 📋 Daftar Isi
+
+- [1. Executive Summary & Visi Proyek](#1-executive-summary--visi-proyek)
+- [2. Latar Belakang Masalah & Urgensi](#2-latar-belakang-masalah--urgensi)
+- [3. Solusi & Value Proposition](#3-solusi--value-proposition)
+- [4. Tim Developer](#4-tim-developer)
+- [5. Fitur Unggulan Sistem](#5-fitur-unggulan-sistem)
+- [6. Demo Aplikasi & Antarmuka](#6-demo-aplikasi--antarmuka)
+- [7. Spesifikasi Teknologi (Tech Stack)](#7-spesifikasi-teknologi-tech-stack)
+- [8. Arsitektur Sistem & Alur Data](#8-arsitektur-sistem--alur-data)
+- [9. Struktur Direktori Proyek](#9-struktur-direktori-proyek)
+- [10. Panduan Instalasi & Setup Lokal](#10-panduan-instalasi--setup-lokal)
+- [11. Panduan Penggunaan (User Manual)](#11-panduan-penggunaan-user-manual)
+- [12. Dokumentasi API (Endpoints)](#12-dokumentasi-api-endpoints)
+- [13. Keamanan, Privasi, & Zero-Knowledge Approach](#13-keamanan-privasi--zero-knowledge-approach)
+- [14. Pengujian Sistem (Testing & Coverage)](#14-pengujian-sistem-testing--coverage)
+- [15. Roadmap & Pengembangan Masa Depan](#15-roadmap--pengembangan-masa-depan)
+- [16. Kesimpulan](#16-kesimpulan)
+- [17. Lisensi](#17-lisensi)
+
+<br>
+
+---
+<br>
+
+## 1. Executive Summary & Visi Proyek
+<br>
+**YOUTH-GUARD** adalah sistem informasi berbasis web real-time yang dirancang khusus untuk mendeteksi, mencegah, dan menanggulangi eskalasi kenakalan remaja kelas berat, dengan fokus utama pada **perkelahian antar pelajar (tawuran)** dan **teror gerombolan bermotor (geng motor)**. Menggabungkan teknologi *Geo-Spatial Mapping*, enkripsi data tanpa identitas (*Anonymous Zero-Knowledge Reporting*), dan komunikasi *WebSockets*, proyek ini menjembatani jurang komunikasi antara masyarakat, pihak institusi pendidikan (Guru BK), dan aparat penegak hukum secara instan.
+<br><br>
+Visi besar kami di ITECHNO CUP 2026 adalah menciptakan lingkungan pendidikan dan ruang publik yang aman dari ancaman kekerasan jalanan melalui pemanfaatan teknologi digital yang inklusif, responsif, dan akurat.
+<br>
+
+---
+<br>
+
+## 2. Latar Belakang Masalah & Urgensi
+<br>
+Fase remaja (usia 13–18 tahun) diwarnai oleh pencarian identitas kelompok yang tinggi. Sayangnya, dalam beberapa tahun terakhir, dinamika sosial ini mengalami pergeseran destruktif:
+<br>
+
+*   **Eskalasi Tawuran Terorganisir**: Perkelahian antar pelajar kini tidak lagi sekadar baku hantam tangan kosong selepas jam sekolah, melainkan menggunakan senjata tajam, gir motor, dan direncanakan melalui grup media sosial tertutup.
+*   **Teror Gerombolan Bermotor (Geng Motor)**: Kelompok remaja yang mengatasnamakan "klub motor" sering melakukan konvoi malam hari, merusak fasilitas umum, melakukan penjarahan kecil-kecilan, hingga melukai warga sipil tanpa alasan yang jelas.
+*   **Bystander Effect & Budaya Bungkam**: Siswa yang mengetahui rencana penyerangan atau titik kumpul sering kali memilih diam karena takut menjadi korban perundungan (*bullying*) lanjutan atau diintimidasi oleh senior kelompok pelaku.
+*   **Keterlambatan Respons Aparat**: Polisi dan pihak sekolah sering kali baru bergerak setelah insiden berdarah terjadi karena minimnya kanal aduan dini yang cepat, aman, dan akurat secara koordinat.
+
+<br>
+
+---
+<br>
+
+## 3. Solusi & Value Proposition
+<br>
+Untuk menjawab permasalahan di atas, **YOUTH-GUARD** menawarkan pendekatan inovatif yang terintegrasi:
+<br>
+
+-   🛡️ **100% Anonim & Aman**: Sistem menghapus semua metadata pelapor (IP, nomor perangkat, nama) secara otomatis pada saat enkripsi data dikirim, memberikan rasa aman mutlak bagi pelapor.
+-   📍 **Live Threat Mapping**: Pemetaan geografis zona merah tempat nongkrong atau rute yang biasa digunakan gerombolan bermotor untuk melakukan aksi kriminal.
+-   ⚡ **Automated Escalation System**: Jika laporan kategori tinggi (misal: membawa sajam) tidak direspons dalam kurun waktu 10 menit oleh pihak sekolah, sistem secara otomatis meneruskan sinyal darurat langsung ke dispatch center kepolisian terdekat.
+
+<br>
+
+---
+<br>
+
+## 4. Tim Developer
+<br>
+
+| Nama Lengkap | Peran Utama | Institusi / Sekolah | Kontak / GitHub |
+|--------------|-------------|---------------------|-----------------|
+| **David Leonardo** | Project Lead & Full Stack Developer | SMKN 2 Tasikmalaya | [@davidleonardo](https://github.com/davidleonardo) |
+| **[Nama Anggota 2]** | UI/UX Designer & Frontend Engineer | SMKN 2 Tasikmalaya | [@anggota2](#) |
+| **[Nama Anggota 3]** | Backend Architect & Database Admin | SMKN 2 Tasikmalaya | [@anggota3](#) |
+
+<br>
+
+---
+<br>
+
+## 5. Fitur Unggulan Sistem
+<br>
+
+### A. Modul Pelaporan Publik (Stealth Report)
+Memungkinkan pengguna (baik siswa, guru, maupun warga sekitar) mengirimkan laporan darurat dalam waktu kurang dari 30 detik tanpa harus melalui proses registrasi atau login akun yang rumit.
+<br>
+
+### B. Peta Titik Rawan Interaktif (Live Threat Map)
+Peta digital berbasis WebGL yang memvisualisasikan data historis dan laporan langsung mengenai titik kumpul geng motor dan lokasi rawan tawuran, lengkap dengan indikator waktu kejadian (*timestamp*).
+<br>
+
+### C. Tombol Panik Darurat (SOS Panic Button)
+Fitur instan bagi korban atau saksi mata yang sedang terancam di jalan raya untuk mengirimkan sinyal bahaya darurat beserta koordinat GPS akurat langsung ke layar *dashboard* satuan patroli terdekat.
+<br>
+
+### D. Dashboard Manajemen Kasus Aparat & Sekolah
+Panel kontrol terpusat bagi Guru Bimbingan Konseling (BK) dan Kepolisian Sektor (Polsek) untuk menyortir laporan, mengubah status investigasi (*Open*, *In-Progress*, *Resolved*), dan mengekspor data statistik bulanan.
+
+<br>
+
+---
+<br>
+
+## 6. Demo Aplikasi & Antarmuka
+<br>
+
+🔗 **[Kunjungi Live Demo YOUTH-GUARD](https://youth-guard.vercel.app)**
+<br><br>
+
+<div align="center">
+  <img src="https://via.placeholder.com/800x450/0f172a/ef4444?text=YOUTH-GUARD+Landing+Page+-+Instant+Anonymous+Reporting" alt="Landing Page" width="800"/>
+  <p><em>Gambar 6.1 - Halaman Utama (Landing Page) dengan fokus kecepatan akses pelaporan darurat.</em></p>
+  <br>
+
+  <img src="https://via.placeholder.com/800x450/0f172a/3b82f6?text=Live+Map+Module+-+Red+Zone+Tracking" alt="Live Map" width="800"/>
+  <p><em>Gambar 6.2 - Peta Interaktif Zona Merah Titik Kumpul Geng Motor dan Tawuran Pelajar.</em></p>
+  <br>
+
+  <img src="https://via.placeholder.com/800x450/0f172a/22c55e?text=Authority+Control+Center+-+Realtime+Dashboard" alt="Dashboard" width="800"/>
+  <p><em>Gambar 6.3 - Panel Kontrol Instansi untuk Guru BK dan Kepolisian.</em></p>
+</div>
+
+<br>
+
+---
+<br>
+
+## 7. Spesifikasi Teknologi (Tech Stack)
+<br>
+
+### Front-End Architecture
+-   **Framework**: Next.js 14 (App Router, Server-Side Rendering untuk performa maksimal pada sinyal rendah).
+-   **Styling**: Tailwind CSS v3 + Headless UI untuk komponen interaktif yang ringan dan responsif.
+-   **State Management**: Zustand untuk manajemen data peta real-time secara efisien.
+-   **Map Rendering**: Mapbox GL JS / Leaflet.js untuk pemetaan spasial berkecepatan tinggi.
+
+### Back-End Architecture
+-   **Runtime & Server**: Node.js dengan Express.js terintegrasi dalam Next.js API Routes.
+-   **Real-time Communication**: Socket.io untuk pengiriman *push alerts* instan tanpa *page refresh*.
+-   **Database & ORM**: PostgreSQL (dihosting via Supabase) dikombinasikan dengan Prisma ORM untuk *Type-Safety* maksimal.
+-   **Storage**: AWS S3 / Supabase Bucket untuk penyimpanan arsip bukti foto kejadian secara aman.
+
+<br>
+
+---
+<br>
+
+## 8. Arsitektur Sistem & Alur Data
+<br>
+
+```text
+[ Masyarakat / Siswa Pelapor ]
+              │
+              ├─ (Kirim Laporan + Geotag GPS) ──▶ [ Next.js API Gateway ]
+              │                                           │
+[ Sinyal SOS Darurat ]                                    │ (Sanitasi & Hapus Jejak IP)
+              │                                           ▼
+              └─────────────────────────────────▶ [ Express / Node Backend ]
+                                                          │
+                        ┌─────────────────────────────────┼──────────────────────────────┐
+                        ▼                                 ▼                              ▼
+                 [ Prisma ORM ]                  [ Socket.io Server ]            [ Supabase Storage ]
+                        │                                 │                              │
+                        ▼                                 ▼                              ▼
+               [ Database PostgreSQL ]           (Broadcasting Live Alert)        (Simpan File Foto)
+                                                          │
+                                                          ▼
+                                          [ Dashboard Instansi (BK & Polisi) ]

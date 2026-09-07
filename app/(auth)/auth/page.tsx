@@ -10,9 +10,11 @@ import {
     AnimatePresence,
 } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
-const API_BASE_URL = "http://localhost:8000/api";
-
+/* ================================================== */
+/* KONFIGURASI VISUAL (TIDAK DIUBAH) */
+/* ================================================== */
 const WAVE_A = "M0,-200 L60,-200 C120,150 0,400 80,750 C130,950 20,1050 50,1200 L0,1200 Z";
 const WAVE_B = "M0,-200 L40,-200 C0,150 120,400 30,750 C-10,950 90,1050 60,1200 L0,1200 Z";
 const SWEEP_WAVE = "M0,-200 L80,-200 C150,200 -20,500 90,800 C160,1000 30,1100 70,1200 L0,1200 Z";
@@ -289,69 +291,45 @@ function AuthPageContent() {
         },
     };
 
+    /* ==================== AUTH HANDLERS ==================== */
+
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setErrorMessage(null);
 
-        // Validasi client-side
-        if (formState.name.trim().length < 1) {
-            setErrorMessage("Nama lengkap wajib diisi.");
-            setIsLoading(false);
-            return;
-        }
-        if (formState.username.trim().length < 8 || formState.username.trim().length > 22) {
-            setErrorMessage("Username harus 8–22 karakter.");
-            setIsLoading(false);
-            return;
-        }
-        if (!/^[a-zA-Z0-9_]+$/.test(formState.username.trim())) {
-            setErrorMessage("Username hanya boleh huruf, angka, dan underscore.");
-            setIsLoading(false);
-            return;
-        }
-        if (!/^\S+@\S+\.\S+$/.test(formState.email.trim())) {
-            setErrorMessage("Format email tidak valid.");
-            setIsLoading(false);
-            return;
-        }
-        if (formState.password.length < 8) {
-            setErrorMessage("Password minimal 8 karakter.");
-            setIsLoading(false);
-            return;
-        }
+        // Validasi
+        if (formState.name.trim().length < 1) { setErrorMessage("Nama lengkap wajib diisi."); setIsLoading(false); return; }
+        if (formState.username.trim().length < 8 || formState.username.trim().length > 22) { setErrorMessage("Username harus 8–22 karakter."); setIsLoading(false); return; }
+        if (!/^[a-zA-Z0-9_]+$/.test(formState.username.trim())) { setErrorMessage("Username hanya boleh huruf, angka, dan underscore."); setIsLoading(false); return; }
+        if (!/^\S+@\S+\.\S+$/.test(formState.email.trim())) { setErrorMessage("Format email tidak valid."); setIsLoading(false); return; }
+        if (formState.password.length < 8) { setErrorMessage("Password minimal 8 karakter."); setIsLoading(false); return; }
 
-        const payload = {
+        // Simpan data sementara untuk dibuatkan profile setelah OTP sukses
+        localStorage.setItem("pending_profile", JSON.stringify({
             name: formState.name,
             username: formState.username,
-            email: formState.email,
-            password: formState.password,
-            password_confirmation: formState.password,
             role: role,
-        };
+            email: formState.email,
+        }));
 
         try {
-            const res = await fetch(`${API_BASE_URL}/register`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", Accept: "application/json" },
-                body: JSON.stringify(payload),
+            // Kirim OTP ke email (akan membuat user baru jika belum ada)
+            const resp = await supabase.auth.signInWithOtp({
+                email: formState.email,
+                options: {
+                    shouldCreateUser: true,
+                },
             });
-            const data = await res.json();
-            if (!res.ok) {
-                let message = data.message || data.error || "Terjadi kesalahan";
-                if (data.errors) {
-                    const firstKey = Object.keys(data.errors)[0];
-                    if (firstKey) message = data.errors[firstKey][0];
-                }
-                setErrorMessage(message);
-                return;
-            }
+            console.log("signInWithOtp response:", resp);
+            const { error } = resp;
 
-            // Simpan email untuk verifikasi, jangan simpan token
-            localStorage.setItem("pending_email", formState.email);
-            router.push("/verify-otp");
-        } catch (err) {
-            setErrorMessage("Koneksi gagal. Periksa jaringan Anda.");
+            if (error) throw error;
+
+            // Redirect ke halaman OTP
+            router.push(`/auth/otp?email=${encodeURIComponent(formState.email)}`);
+        } catch (err: any) {
+            setErrorMessage(err.message || "Terjadi kesalahan");
         } finally {
             setIsLoading(false);
         }
@@ -362,43 +340,81 @@ function AuthPageContent() {
         setIsLoading(true);
         setErrorMessage(null);
 
-        if (!formState.username.trim() || !formState.password.trim()) {
-            setErrorMessage("Email/Username dan password wajib diisi.");
+        if (!formState.email.trim() || !formState.password.trim()) {
+            setErrorMessage("Email dan password wajib diisi.");
             setIsLoading(false);
             return;
         }
 
-        const payload = {
-            identifier: formState.username,
-            password: formState.password,
-        };
-
         try {
-            const res = await fetch(`${API_BASE_URL}/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", Accept: "application/json" },
-                body: JSON.stringify(payload),
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: formState.email,
+                password: formState.password,
             });
-            const data = await res.json();
-            if (!res.ok) {
-                let message = data.message || data.error || "Login gagal";
-                if (data.errors) {
-                    const firstKey = Object.keys(data.errors)[0];
-                    if (firstKey) message = data.errors[firstKey][0];
-                }
-                setErrorMessage(message);
+
+            if (error) throw error;
+
+            const user = data.user;
+            if (!user) throw new Error("User tidak ditemukan");
+
+            // Jika email belum terverifikasi, arahkan ke OTP
+            if (!user.email_confirmed_at) {
+                await supabase.auth.signOut();
+                localStorage.setItem("pending_email", formState.email);
+                router.push(`/auth/otp?email=${encodeURIComponent(formState.email)}`);
                 return;
             }
 
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify(data.data));
-            router.push("/dashboard");
-        } catch (err) {
-            setErrorMessage("Koneksi gagal. Periksa jaringan Anda.");
+            // Ambil atau buat profile
+            let { data: profile } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", user.id)
+                .single();
+
+            if (!profile) {
+                const { error: insertError } = await supabase.from("profiles").insert({
+                    id: user.id,
+                    username: user.user_metadata?.username || user.email,
+                    name: user.user_metadata?.name || user.email,
+                    role: user.user_metadata?.role || "user",
+                    is_active: true,
+                    email_verified_at: new Date().toISOString(),
+                });
+                if (insertError) throw insertError;
+
+                const { data: newProfile } = await supabase
+                    .from("profiles")
+                    .select("*")
+                    .eq("id", user.id)
+                    .single();
+                profile = newProfile;
+            }
+
+            if (profile.role === "admin") {
+                router.push("/dashboard/admin");
+            } else if (profile.role === "umkm") {
+                const { data: umkmData } = await supabase
+                    .from("umkm")
+                    .select("id")
+                    .eq("user_id", user.id)
+                    .single();
+                if (!umkmData) {
+                    router.push("/auth/profile");
+                } else {
+                    router.push("/dashboard/umkm");
+                }
+            } else {
+                router.push("/dashboard/user");
+            }
+        } catch (err: any) {
+            setErrorMessage(err.message || "Login gagal");
         } finally {
             setIsLoading(false);
         }
     };
+
+    /* ==================== UI (TIDAK DIUBAH) ==================== */
 
     return (
         <main
@@ -409,7 +425,6 @@ function AuthPageContent() {
                 my.set((e.clientY / window.innerHeight) * 100);
             }}
         >
-            {/* Back to home */}
             <div className="absolute top-6 left-6 z-30">
                 <motion.button type="button" onClick={() => router.push("/")} whileHover={{ x: -3, scale: 1.02 }} whileTap={{ scale: 0.97 }} className="group flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--border)] bg-black/20 backdrop-blur-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-green-400/30 hover:bg-green-400/10 transition-all duration-200 text-xs font-bold tracking-wide">
                     <svg className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
@@ -417,14 +432,12 @@ function AuthPageContent() {
                 </motion.button>
             </div>
 
-            {/* Theme toggle */}
             <div className="absolute top-6 right-6 z-30">
                 <motion.button onClick={toggleTheme} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="p-2.5 rounded-full border border-[var(--border)] bg-black/20 backdrop-blur-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-green-400/30 transition-all flex items-center justify-center">
                     {theme === 'dark' ? '☀️' : '🌙'}
                 </motion.button>
             </div>
 
-            {/* Background layers */}
             <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#021508] via-[#083317] to-[#011206]" />
             <motion.div style={{ x: blobX, y: blobY }} className="absolute z-0 top-[-25%] right-[-10%] w-[55vw] h-[55vw] rounded-full bg-emerald-400/25 blur-[140px]" />
             <motion.div style={{ x: blobX, y: blobY }} className="absolute z-0 bottom-[-25%] left-[5%] w-[45vw] h-[45vw] rounded-full bg-green-400/20 blur-[130px]" />
@@ -437,9 +450,7 @@ function AuthPageContent() {
             </div>
             <ParticlesEngine />
 
-            {/* Main content */}
             <div className="absolute inset-0 z-10 flex">
-                {/* Green panel */}
                 <motion.div initial={false} animate={{ left: greenPanelLeft }} transition={{ duration: 0 }} className="absolute top-0 h-full w-[50vw] flex items-center justify-center p-12">
                     <AnimatePresence mode="wait">
                         {!isSweeping && (
@@ -468,7 +479,6 @@ function AuthPageContent() {
                     </AnimatePresence>
                 </motion.div>
 
-                {/* Black panel */}
                 <motion.div initial={false} animate={{ left: blackPanelLeft }} transition={{ duration: 0 }} className="absolute top-0 h-full w-[50vw] bg-[var(--bg-panel)] z-20">
                     <div className={`absolute top-0 h-full w-[100px] pointer-events-none ${isSignup ? "-right-[99px]" : "-left-[99px] scale-x-[-1]"}`}>
                         <svg className="w-full h-full" viewBox="0 0 100 1000" preserveAspectRatio="none">
@@ -530,7 +540,7 @@ function AuthPageContent() {
                                         </form>
                                     ) : (
                                         <form className="flex flex-col gap-5" onSubmit={handleLogin}>
-                                            <FloatingInput type="text" label="Email / Username" icon={ICON_USER} value={formState.username} onChange={(e: any) => handleInput("username", e.target.value)} />
+                                            <FloatingInput type="email" label="Email" icon={ICON_MAIL} value={formState.email} onChange={(e: any) => handleInput("email", e.target.value)} />
                                             <FloatingInput type="password" label="Password" icon={ICON_LOCK} value={formState.password} onChange={(e: any) => handleInput("password", e.target.value)} />
 
                                             <div className="flex items-center justify-between">

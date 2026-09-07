@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function UmkmPage() {
-  return null;
+  redirect("/umkm/dashboard");
 }

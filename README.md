@@ -1,11 +1,11 @@
 <div align="center">
   
-  # 🛡️ YOUTH-GUARD (INTEGRATED YOUTH CONFLICT & GANG ACTIVITY DETERRENT SYSTEM)
-  ### Platform Digital Pelaporan Anonim, Pemetaan Zona Merah, dan Mitigasi Dini Kenakalan Remaja (Perkelahian & Gerombolan Bermotor)
+  # 🌱 UMKM HIJAU (DIGITAL SUSTAINABILITY ASSESSMENT & CERTIFICATION SYSTEM)
+  ### Platform Digital Penilaian Keberlanjutan UMKM, Monitoring Konsumsi Energi, Verifikasi Lapangan, dan Sertifikasi UMKM Ramah Lingkungan
   <br>
 
-  [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-success?style=for-the-badge)](https://youth-guard.vercel.app)
-  [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/davidleonardo/youth-guard)
+  [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-success?style=for-the-badge)](https://umkm-hijau.vercel.app)
+  [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/)
   [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
   <br>
 
@@ -48,9 +48,12 @@
 
 ## 1. Executive Summary & Visi Proyek
 <br>
-**YOUTH-GUARD** adalah sistem informasi berbasis web real-time yang dirancang khusus untuk mendeteksi, mencegah, dan menanggulangi eskalasi kenakalan remaja kelas berat, dengan fokus utama pada **perkelahian antar pelajar (tawuran)** dan **teror gerombolan bermotor (geng motor)**. Menggabungkan teknologi *Geo-Spatial Mapping*, enkripsi data tanpa identitas (*Anonymous Zero-Knowledge Reporting*), dan komunikasi *WebSockets*, proyek ini menjembatani jurang komunikasi antara masyarakat, pihak institusi pendidikan (Guru BK), dan aparat penegak hukum secara instan.
-<br><br>
-Visi besar kami di ITECHNO CUP 2026 adalah menciptakan lingkungan pendidikan dan ruang publik yang aman dari ancaman kekerasan jalanan melalui pemanfaatan teknologi digital yang inklusif, responsif, dan akurat.
+
+**UMKM HIJAU** adalah platform digital berbasis web yang dirancang untuk membantu UMKM melakukan penilaian keberlanjutan usaha secara terstruktur. Platform ini memanfaatkan data seperti konsumsi listrik dan teknologi yang digunakan untuk menghasilkan penilaian yang dapat menjadi dasar peningkatan praktik usaha ramah lingkungan.
+
+<br>
+
+Visi besar **UMKM HIJAU** adalah membantu UMKM memahami kondisi keberlanjutan usahanya, meningkatkan efisiensi penggunaan sumber daya, serta mendorong penerapan praktik bisnis yang lebih ramah lingkungan melalui proses penilaian, verifikasi, dan sertifikasi digital.
 <br>
 
 ---
@@ -58,13 +61,14 @@ Visi besar kami di ITECHNO CUP 2026 adalah menciptakan lingkungan pendidikan dan
 
 ## 2. Latar Belakang Masalah & Urgensi
 <br>
-Fase remaja (usia 13–18 tahun) diwarnai oleh pencarian identitas kelompok yang tinggi. Sayangnya, dalam beberapa tahun terakhir, dinamika sosial ini mengalami pergeseran destruktif:
+
+UMKM memiliki peran penting dalam perekonomian. Namun, penerapan prinsip keberlanjutan pada sektor UMKM masih menghadapi beberapa tantangan:
 <br>
 
-*   **Eskalasi Tawuran Terorganisir**: Perkelahian antar pelajar kini tidak lagi sekadar baku hantam tangan kosong selepas jam sekolah, melainkan menggunakan senjata tajam, gir motor, dan direncanakan melalui grup media sosial tertutup.
-*   **Teror Gerombolan Bermotor (Geng Motor)**: Kelompok remaja yang mengatasnamakan "klub motor" sering melakukan konvoi malam hari, merusak fasilitas umum, melakukan penjarahan kecil-kecilan, hingga melukai warga sipil tanpa alasan yang jelas.
-*   **Bystander Effect & Budaya Bungkam**: Siswa yang mengetahui rencana penyerangan atau titik kumpul sering kali memilih diam karena takut menjadi korban perundungan (*bullying*) lanjutan atau diintimidasi oleh senior kelompok pelaku.
-*   **Keterlambatan Respons Aparat**: Polisi dan pihak sekolah sering kali baru bergerak setelah insiden berdarah terjadi karena minimnya kanal aduan dini yang cepat, aman, dan akurat secara koordinat.
+*   **Konsumsi Energi yang Belum Terukur**: Banyak UMKM belum memiliki gambaran yang jelas mengenai penggunaan listrik dan efisiensi energi dalam kegiatan usaha.
+*   **Pemanfaatan Teknologi yang Belum Optimal**: Teknologi dapat membantu meningkatkan efisiensi usaha, tetapi pemilihannya perlu disesuaikan dengan kebutuhan dan dampaknya terhadap keberlanjutan.
+*   **Minimnya Pemahaman Praktik Ramah Lingkungan**: UMKM membutuhkan indikator dan panduan sederhana agar dapat mengetahui langkah perbaikan yang dapat dilakukan.
+*   **Belum Adanya Penilaian dan Verifikasi Terintegrasi**: Data usaha, hasil penilaian, verifikasi lapangan, dan sertifikasi perlu dikelola dalam satu sistem digital.
 
 <br>
 
@@ -73,12 +77,14 @@ Fase remaja (usia 13–18 tahun) diwarnai oleh pencarian identitas kelompok yang
 
 ## 3. Solusi & Value Proposition
 <br>
-Untuk menjawab permasalahan di atas, **YOUTH-GUARD** menawarkan pendekatan inovatif yang terintegrasi:
+
+Untuk menjawab permasalahan di atas, **UMKM HIJAU** menawarkan pendekatan digital yang terintegrasi:
 <br>
 
--   🛡️ **100% Anonim & Aman**: Sistem menghapus semua metadata pelapor (IP, nomor perangkat, nama) secara otomatis pada saat enkripsi data dikirim, memberikan rasa aman mutlak bagi pelapor.
--   📍 **Live Threat Mapping**: Pemetaan geografis zona merah tempat nongkrong atau rute yang biasa digunakan gerombolan bermotor untuk melakukan aksi kriminal.
--   ⚡ **Automated Escalation System**: Jika laporan kategori tinggi (misal: membawa sajam) tidak direspons dalam kurun waktu 10 menit oleh pihak sekolah, sistem secara otomatis meneruskan sinyal darurat langsung ke dispatch center kepolisian terdekat.
+-   📊 **Penilaian Digital & Terstruktur**: Mengolah data UMKM berdasarkan indikator keberlanjutan untuk menghasilkan skor penilaian.
+-   ⚡ **Monitoring Konsumsi Energi**: Membantu UMKM melihat data penggunaan listrik sebagai salah satu aspek dalam evaluasi keberlanjutan.
+-   🔎 **Verifikasi Lapangan**: Hasil penilaian dapat dilanjutkan ke proses verifikasi untuk memastikan data dan kondisi usaha.
+-   🏆 **Sertifikasi UMKM Hijau**: Hasil penilaian dan verifikasi dapat menjadi dasar pemberian status sertifikasi seperti **Gold** atau **Silver**.
 
 <br>
 
@@ -102,19 +108,19 @@ Untuk menjawab permasalahan di atas, **YOUTH-GUARD** menawarkan pendekatan inova
 ## 5. Fitur Unggulan Sistem
 <br>
 
-### A. Modul Pelaporan Publik (Stealth Report)
-Memungkinkan pengguna (baik siswa, guru, maupun warga sekitar) mengirimkan laporan darurat dalam waktu kurang dari 30 detik tanpa harus melalui proses registrasi atau login akun yang rumit.
+### A. Modul Penilaian UMKM
+Memungkinkan pelaku UMKM memasukkan data usaha seperti konsumsi listrik, teknologi yang digunakan, dan informasi pendukung lainnya untuk memperoleh hasil penilaian keberlanjutan.
 <br>
 
-### B. Peta Titik Rawan Interaktif (Live Threat Map)
+### B. Monitoring & Visualisasi Data UMKM
 Peta digital berbasis WebGL yang memvisualisasikan data historis dan laporan langsung mengenai titik kumpul geng motor dan lokasi rawan tawuran, lengkap dengan indikator waktu kejadian (*timestamp*).
 <br>
 
-### C. Tombol Panik Darurat (SOS Panic Button)
+### C. Verifikasi Lapangan
 Fitur instan bagi korban atau saksi mata yang sedang terancam di jalan raya untuk mengirimkan sinyal bahaya darurat beserta koordinat GPS akurat langsung ke layar *dashboard* satuan patroli terdekat.
 <br>
 
-### D. Dashboard Manajemen Kasus Aparat & Sekolah
+### D. Dashboard Manajemen UMKM & Sertifikasi
 Panel kontrol terpusat bagi Guru Bimbingan Konseling (BK) dan Kepolisian Sektor (Polsek) untuk menyortir laporan, mengubah status investigasi (*Open*, *In-Progress*, *Resolved*), dan mengekspor data statistik bulanan.
 
 <br>
@@ -125,20 +131,20 @@ Panel kontrol terpusat bagi Guru Bimbingan Konseling (BK) dan Kepolisian Sektor 
 ## 6. Demo Aplikasi & Antarmuka
 <br>
 
-🔗 **[Kunjungi Live Demo YOUTH-GUARD](https://youth-guard.vercel.app)**
+🔗 **[Kunjungi Live Demo UMKM HIJAU](https://umkm-hijau.vercel.app)**
 <br><br>
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x450/0f172a/ef4444?text=YOUTH-GUARD+Landing+Page+-+Instant+Anonymous+Reporting" alt="Landing Page" width="800"/>
-  <p><em>Gambar 6.1 - Halaman Utama (Landing Page) dengan fokus kecepatan akses pelaporan darurat.</em></p>
+  <img src="https://via.placeholder.com/800x450/0f172a/ef4444?text=UMKM HIJAU+Landing+Page+-+Instant+Anonymous+Reporting" alt="Landing Page" width="800"/>
+  <p><em>Gambar 6.1 - Halaman utama UMKM HIJAU untuk memperkenalkan platform penilaian keberlanjutan UMKM.</em></p>
   <br>
 
   <img src="https://via.placeholder.com/800x450/0f172a/3b82f6?text=Live+Map+Module+-+Red+Zone+Tracking" alt="Live Map" width="800"/>
-  <p><em>Gambar 6.2 - Peta Interaktif Zona Merah Titik Kumpul Geng Motor dan Tawuran Pelajar.</em></p>
+  <p><em>Gambar 6.2 - Dashboard penilaian keberlanjutan dan monitoring data UMKM.</em></p>
   <br>
 
   <img src="https://via.placeholder.com/800x450/0f172a/22c55e?text=Authority+Control+Center+-+Realtime+Dashboard" alt="Dashboard" width="800"/>
-  <p><em>Gambar 6.3 - Panel Kontrol Instansi untuk Guru BK dan Kepolisian.</em></p>
+  <p><em>Gambar 6.3 - Panel pengelolaan verifikasi dan sertifikasi UMKM.</em></p>
 </div>
 
 <br>
@@ -152,8 +158,8 @@ Panel kontrol terpusat bagi Guru Bimbingan Konseling (BK) dan Kepolisian Sektor 
 ### Front-End Architecture
 -   **Framework**: Next.js 14 (App Router, Server-Side Rendering untuk performa maksimal pada sinyal rendah).
 -   **Styling**: Tailwind CSS v3 + Headless UI untuk komponen interaktif yang ringan dan responsif.
--   **State Management**: Zustand untuk manajemen data peta real-time secara efisien.
--   **Map Rendering**: Mapbox GL JS / Leaflet.js untuk pemetaan spasial berkecepatan tinggi.
+-   **State Management**: Zustand untuk manajemen state data penilaian dan dashboard secara efisien.
+-   **Map Rendering**: Chart library / visualisasi data untuk menampilkan hasil penilaian dan monitoring UMKM.
 
 ### Back-End Architecture
 -   **Runtime & Server**: Node.js dengan Express.js terintegrasi dalam Next.js API Routes.
@@ -170,20 +176,20 @@ Panel kontrol terpusat bagi Guru Bimbingan Konseling (BK) dan Kepolisian Sektor 
 <br>
 
 ```text
-[ Masyarakat / Siswa Pelapor ]
+[ Pelaku UMKM ]
               │
-              ├─ (Kirim Laporan + Geotag GPS) ──▶ [ Next.js API Gateway ]
+              ├─ (Input Data Usaha + Konsumsi Energi) ──▶ [ Next.js API Gateway ]
               │                                           │
-[ Sinyal SOS Darurat ]                                    │ (Sanitasi & Hapus Jejak IP)
+[ Data Penilaian UMKM ]                                    │ (Validasi & Pengolahan Data)
               │                                           ▼
-              └─────────────────────────────────▶ [ Express / Node Backend ]
+              └─────────────────────────────────▶ [ Next.js Backend / API ]
                                                           │
                         ┌─────────────────────────────────┼──────────────────────────────┐
                         ▼                                 ▼                              ▼
-                 [ Prisma ORM ]                  [ Socket.io Server ]            [ Supabase Storage ]
+                 [ Prisma ORM ]                  [ Service Penilaian ]            [ Supabase Storage ]
                         │                                 │                              │
                         ▼                                 ▼                              ▼
-               [ Database PostgreSQL ]           (Broadcasting Live Alert)        (Simpan File Foto)
+               [ Database PostgreSQL ]           (Sinkronisasi Data)        (Simpan File Foto)
                                                           │
                                                           ▼
-                                          [ Dashboard Instansi (BK & Polisi) ]
+                                          [ Dashboard UMKM & Admin ]
